@@ -4,10 +4,10 @@ public class Song {
 	
 	private boolean favorite;
 	private double rating;
-	
+
 	private String title;
 	private String artist;
-	
+
 	public Song(String name, String author) {
 		title = name;
 		artist = author;
