@@ -15,13 +15,13 @@ public class Album {
 	private String year;
 	private String title;
 	private String genre;
-	private ArrayList<String> songs;
+	private ArrayList<Song> songs;
 	
 	
 	/*
 	 * @pre title, artis, genre, year, songs != null
 	 */
-	public Album(String title, String artist, String genre, String year, ArrayList<String> songs) {
+	public Album(String title, String artist, String genre, String year, ArrayList<Song> songs) {
 		this.title = title;
 		this.artist = artist;
 		this.genre = genre;
@@ -44,12 +44,11 @@ public class Album {
 		return year;
 	}
 	
-	public ArrayList<String> getSongs() {
-		return new ArrayList<String>(songs);
+	public ArrayList<Song> getSongs() {
+		return songs;
 	}
 	
-	public void addSong(String name) {
-		songs.add(name);
+	public void addSong(Song song) {
+		songs.add(song);
 	}
-
 }

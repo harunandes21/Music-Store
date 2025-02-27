@@ -13,12 +13,12 @@ import java.util.Collections;
 public class Playlist {
 	
 	private String name;
-	private ArrayList<String> songs;
+	private ArrayList<Song> songs;
 
 	/*
-	 * @pre name, songs != nil
+	 * @pre name, songs != null
 	 */
-	public Playlist(String name, ArrayList<String> songs) {
+	public Playlist(String name, ArrayList<Song> songs) {
 		this.name = name;
 		this.songs = songs;
 	}
@@ -27,15 +27,14 @@ public class Playlist {
 	
 	public void setName(String name) {this.name = name;}
 	
-	public ArrayList<String> getSongs() {return new ArrayList<String>(songs);}
+	public ArrayList<Song> getSongs() {return songs;}
 	
-	public void addSong(String name) {songs.add(name);}
+	public void addSong(Song song) {songs.add(song);}
 	
-	public void removeSong(String name) {
+	public void removeSong(Song song) {
 		for (int i = 0; i < songs.size(); i++) {
-			if (songs.get(i) == name) {
+			if (songs.get(i).equals(song)) {
 				songs.remove(i);
-				return;
 			}
 		}
 	}
@@ -45,6 +44,6 @@ public class Playlist {
 	}
 	
 	public void sortByNames() {
-		Collections.sort(songs);
+		songs.sort((a,b) -> (a.getName().compareTo(b.getName())));
 	}
 }
