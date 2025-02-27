@@ -46,4 +46,8 @@ public class Playlist {
 	public void sortByNames() {
 		songs.sort((a,b) -> (a.getName().compareTo(b.getName())));
 	}
+	
+	public void sortByYear() {
+		songs.sort((a,b) -> (a.getAlbum().getYear().compareTo(b.getAlbum().getYear())));
+	}
 }
