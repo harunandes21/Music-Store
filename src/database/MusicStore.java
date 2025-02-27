@@ -1,8 +1,12 @@
-package model;
+package database;
 
 
 import java.io.*;
 import java.util.*;
+
+import model.Album;
+import model.Playlist;
+import model.Song;
 
 
 

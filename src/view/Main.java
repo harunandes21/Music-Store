@@ -1,10 +1,11 @@
 package view;
 
-import model.MusicStore;
 import model.Album;
 import model.Song;
 
 import java.io.IOException;
+
+import database.MusicStore;
 
 public class Main {
 
