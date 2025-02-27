@@ -10,6 +10,10 @@ public class Song {
 
 
 	public Song(String name, String author) {
+		title=name;
+		artist=author;
+		
+	}
 
 	private Album album;
 	
