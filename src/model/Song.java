@@ -8,9 +8,19 @@ public class Song {
 	private String title;
 	private String artist;
 
+
 	public Song(String name, String author) {
+
+	private Album album;
+	
+	/*
+	 * @pre name, author != null
+	 */
+	public Song(String name, String author, Album album) {
+
 		title = name;
 		artist = author;
+		this.album = album;
 	}
 	
 	public void setRating(double rating) {
@@ -20,24 +30,18 @@ public class Song {
 		this.rating = rating;
 	}
 	
-	public void setFavorite(boolean b) {
-		favorite = b;
-	}
+	public void setFavorite(boolean b) {favorite = b;}
 	
-	public String getName() {
-		return title;
-	}
+	public String getName() {return title;}
 	
-	public String getArtist() {
-		return artist;
-	}
+	public Album getAlbum() {return album;}
 	
-	public double getRating() {
-		return rating;
-	}
+	public String getArtist() {return artist;}
 	
-	public boolean getFavorite() {
-		return favorite;
-	}
+	public double getRating() {return rating;}
+	
+	public boolean getFavorite() {return favorite;}
+	
+	public boolean equals(Song song) {return ((song.getName() == title) && (song.getArtist() == artist) && (song.getAlbum() == album));}
 	
 }
