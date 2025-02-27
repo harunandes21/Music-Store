@@ -4,15 +4,20 @@ public class Song {
 	
 	private boolean favorite;
 	private double rating;
-	
+
 	private String title;
 	private String artist;
+
+
+	public Song(String name, String author) {
+
 	private Album album;
 	
 	/*
 	 * @pre name, author != null
 	 */
 	public Song(String name, String author, Album album) {
+
 		title = name;
 		artist = author;
 		this.album = album;
