@@ -21,6 +21,7 @@ public class MusicStore {
 	public MusicStore() {
 		albums = new ArrayList<Album>();
 		playlists = new ArrayList<Playlist>();
+		allSongs = new ArrayList<>();
 	}
 	
 	public ArrayList<Playlist> getPlaylists() {
@@ -51,7 +52,7 @@ public class MusicStore {
 		
 			for (Song s : allSongs) {
 				if (s.getName().equalsIgnoreCase(name)) {
-					System.out.println("Song found: Album - " + s.getAlbum() + ", Title - "
+					System.out.println("Song found: Album - " + s.getAlbum().getTitle() + ", Title - "
 							+ s.getName() + ", Artist - " + s.getArtist());
 					return s;
 				}
@@ -65,7 +66,7 @@ public class MusicStore {
 		
 			for (Song s : allSongs) {
 				if (s.getArtist().equalsIgnoreCase(name)) {
-					System.out.println("Song found: Album - " + s.getAlbum() + ", Title - "
+					System.out.println("Song found: Album - " + s.getAlbum().getTitle() + ", Title - "
 							+ s.getName() + ", Artist - " + s.getArtist());
 					return s;
 				}
@@ -109,7 +110,7 @@ public class MusicStore {
 
 		MusicStore store = new MusicStore();
 		BufferedReader reader = new BufferedReader(new FileReader("albums/albums.txt"));
-		 store.allSongs = new ArrayList<Song>();
+		 
 		String line;
 		while ((line = reader.readLine()) != null) {
 			String[] parts = line.split(",");
@@ -151,62 +152,7 @@ public class MusicStore {
 	    }
 
 	}
-	public void createPlaylist(String name) {
-	    
-	    for (Playlist p : playlists) {
-	        if (p.getName().equalsIgnoreCase(name)) {
-	            System.out.println("Playlist '" + name + "' already exists.");
-	            return;
-	        }
-	    }
-	    
-	    playlists.add(new Playlist(name, new ArrayList<>()));
-	}
-	public void addSongToPlaylist(String playlistName, String songName) {
-	    Playlist playlist = getPlaylist(playlistName);
-	    if (playlist == null) {
-	        System.out.println("Playlist '" + playlistName + "' not found.");
-	        return;
-	    }
-
-	    Song song = searchSongByName(songName);
-	    if (song == null) {
-	        System.out.println("Song '" + songName + "' not found in any album.");
-	        return;
-	    }
-
-	    playlist.addSong(song);
-	    System.out.println("Song '" + songName + "' added to playlist '" + playlistName + "'.");
-	}
-	public void removeSongFromPlaylist(String playlistName, String songName) {
-	    Playlist playlist = getPlaylist(playlistName);
-	    if (playlist == null) {
-	        System.out.println("Playlist '" + playlistName + "' not found.");
-	        return;
-	    }
-
-	    for (Song s : playlist.getSongs()) {
-	        if (s.getName().equalsIgnoreCase(songName)) {
-	            playlist.removeSong(s);
-	            System.out.println("Song '" + songName + "' removed from playlist '" + playlistName + "'.");
-	            return;
-	        }
-	    }
-	    System.out.println("Song '" + songName + "' not found in playlist '" + playlistName + "'.");
-	}
-	public void listAllPlaylists() {
-	    if (playlists.isEmpty()) {
-	        System.out.println("No playlists available.");
-	        return;
-	    }
-	    System.out.println("Playlists:");
-	    for (Playlist p : playlists) {
-	        System.out.println("Playlist: " + p.getName());
-	        for (Song s : p.getSongs()) {
-	            System.out.println(" - " + s.getName() + " by " + s.getArtist());
-	        }
-	    }
-	}
+	
 	
 }
 

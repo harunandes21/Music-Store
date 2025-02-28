@@ -1,6 +1,7 @@
 package view;
 
 import model.Album;
+import model.LibraryModel;
 import model.Song;
 
 import java.io.IOException;
@@ -17,29 +18,26 @@ public class Main {
 			String path = "albums/albums.txt";
 
 			MusicStore musicStore = MusicStore.initializer(path);
-			
-			System.out.println("Albums:");
-			for(Album album: musicStore.getAlbums())
-			{
-				System.out.println(album.getTitle() + "_" + album.getArtist());
-		                  
-                
-				
-			}
-			System.out.println("All Songs:");
-			for (Song song : musicStore.getAllSongs()) {
-                System.out.println("Song: " + song.getName());
-                System.out.println("Artist: " + song.getArtist());
-                System.out.println("Album: " + song.getAlbum().getTitle());
-                System.out.println(); 
-            }
+			LibraryModel UserLibrary= new LibraryModel(musicStore);
+			/*
+			 * System.out.println("Albums:"); for(Album album: musicStore.getAlbums()) {
+			 * System.out.println(album.getTitle() + "_" + album.getArtist());
+			 * 
+			 * 
+			 * 
+			 * } System.out.println("All Songs:"); for (Song song :
+			 * musicStore.getAllSongs()) { System.out.println("Song: " + song.getName());
+			 * System.out.println("Artist: " + song.getArtist());
+			 * System.out.println("Album: " + song.getAlbum().getTitle());F
+			 * System.out.println(); }
+			 */
 			Scanner scanner = new Scanner(System.in);
 	        String plName;
 	        
 	        
 			System.out.println("name for the new playlist:");
 	        plName = scanner.nextLine();
-	        musicStore.createPlaylist(plName);
+	        UserLibrary.createPlaylist(plName);
 	        
 	        System.out.print("\nEnter the name of the album you want to search for: ");
             String albumName = scanner.nextLine();
@@ -55,15 +53,15 @@ public class Main {
             System.out.println("\name of the song which will be added to playlist:");
             String songName = scanner.nextLine();
             musicStore.searchSongByName(songName);
-            musicStore.addSongToPlaylist(plName, songName);
+            UserLibrary.addSongToPlaylist(plName, songName);
             
             System.out.println("\name of the  second song which will be added to playlist:");
             songName = scanner.nextLine();
             musicStore.searchSongByName(songName);
-            musicStore.addSongToPlaylist(plName, songName);
+            UserLibrary.addSongToPlaylist(plName, songName);
             
             System.out.println("\nSongs in the playlist '" + plName + "':");
-            musicStore.listAllPlaylists();
+            UserLibrary.listAllPlaylists();
             
             
             
