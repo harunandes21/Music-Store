@@ -30,7 +30,7 @@ public class Main {
 			for (Song song : musicStore.getAllSongs()) {
                 System.out.println("Song: " + song.getName());
                 System.out.println("Artist: " + song.getArtist());
-                System.out.println("Album: " + song.getAlbum());
+                System.out.println("Album: " + song.getAlbum().getTitle());
                 System.out.println(); // New line after each song
             }
 			Scanner scanner = new Scanner(System.in);
