@@ -2,93 +2,131 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import model.LibraryModel;
-import database.MusicStore;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import model.Song;
+import model.Album;
 import model.Playlist;
+import database.MusicStore;
 
 public class MusicLibraryView {
 
     private MusicStore musicStore;
-    private LibraryModel libraryModel;
-
-    // GUI components
-    private JList<String> songListView;
+    private DefaultListModel<String> playlistListModel;
     private JList<String> playlistListView;
     private JTextField searchField;
-    private JTextField playlistNameField;
-    private JButton searchButton;
-    private JButton addToPlaylistButton;
-    private JButton createPlaylistButton;
-    private DefaultListModel<String> songListModel;
-    private DefaultListModel<String> playlistListModel;
+    private DefaultListModel<String> songListModel; // Changed to DefaultListModel for JList
 
-    public MusicLibraryView() {
-        // Initialize the music store and library model
-        musicStore = new MusicStore();
-        libraryModel = new LibraryModel(musicStore);
-
-        // Initialize the models for the list views
-        songListModel = new DefaultListModel<>();
+    public MusicLibraryView(MusicStore musicStore) {
+        this.musicStore = musicStore;
         playlistListModel = new DefaultListModel<>();
+        songListModel = new DefaultListModel<>();
     }
 
     public void createAndShowGUI() {
-        // Set up the frame
-        JFrame frame = new JFrame("Music Library Management");
+        // Set up the frame with a smaller size
+        JFrame frame = new JFrame("Music Store");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 600);
+        frame.setSize(400, 400); // Smaller window size
 
         // Set up the main panel with BoxLayout (vertical)
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        // Set up the song list view
-        songListView = new JList<>(songListModel);
-        songListView.setPreferredSize(new Dimension(450, 200));
-        updateSongList();
-
-        // Set up the playlist list view
+        // Set up the playlist list view (smaller JList)
         playlistListView = new JList<>(playlistListModel);
-        playlistListView.setPreferredSize(new Dimension(450, 200));
+        playlistListView.setPreferredSize(new Dimension(300, 100)); // Smaller playlist section (height reduced further)
+        playlistListView.setMaximumSize(new Dimension(300, 100)); // Prevent it from growing larger
+        playlistListView.setMinimumSize(new Dimension(250, 100)); // Set a minimum size for consistency
+        updatePlaylistList();
 
-        // Search field and button
+        // Add mouse listener to handle playlist clicks
+        playlistListView.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    String selectedPlaylistName = playlistListView.getSelectedValue();
+                    showSongsForPlaylist(selectedPlaylistName);
+                }
+            }
+        });
+
+        // Search field (smaller, centered)
         searchField = new JTextField();
-        searchField.setPreferredSize(new Dimension(450, 30));
-        searchField.setToolTipText("Enter song name...");
-        searchButton = new JButton("Search");
-        searchButton.addActionListener(e -> searchSongs());
+        searchField.setPreferredSize(new Dimension(200, 30)); // Reasonable size for the text field
+        searchField.setMaximumSize(new Dimension(200, 30)); // Prevent it from getting larger
+        searchField.setMinimumSize(new Dimension(150, 30)); // Prevent it from getting too small
+        searchField.setAlignmentX(Component.CENTER_ALIGNMENT); // Centered
+        searchField.setToolTipText("Enter song or album name...");
 
-        // Playlist name field and buttons
-        playlistNameField = new JTextField();
-        playlistNameField.setPreferredSize(new Dimension(450, 30));
-        playlistNameField.setToolTipText("Enter playlist name...");
-        createPlaylistButton = new JButton("Create Playlist");
+        // Create a JList for displaying songs (one song per row)
+        JList<String> songListView = new JList<>(songListModel);
+        songListView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Only allow single selection
+        JScrollPane songListScrollPane = new JScrollPane(songListView);
+        songListScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        songListScrollPane.setPreferredSize(new Dimension(500, 200));
+
+        // Add mouse listener to handle song clicks
+        songListView.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    String selectedSong = songListView.getSelectedValue();
+                    showSongDetails(selectedSong);
+                }
+            }
+        });
+
+        // Buttons for search
+        JButton searchSongButton = new JButton("Search Song");
+        searchSongButton.addActionListener(e -> searchSongs());
+
+        JButton searchAlbumButton = new JButton("Search Album");
+        searchAlbumButton.addActionListener(e -> searchAlbums());
+
+        // Buttons for playlist actions
+        JButton createPlaylistButton = new JButton("Create Playlist");
         createPlaylistButton.addActionListener(e -> createPlaylist());
-        addToPlaylistButton = new JButton("Add to Playlist");
-        addToPlaylistButton.addActionListener(e -> addSongToPlaylist());
 
         // Arrange the layout
-        panel.add(new JLabel("Songs:"));
-        panel.add(new JScrollPane(songListView));
-        panel.add(searchField);
-        panel.add(searchButton);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(searchSongButton);
+        buttonPanel.add(searchAlbumButton);
+
         panel.add(new JLabel("Playlists:"));
         panel.add(new JScrollPane(playlistListView));
-        panel.add(playlistNameField);
+        panel.add(Box.createRigidArea(new Dimension(-5, 10))); // Add space between elements
+        panel.add(searchField);
+        panel.add(buttonPanel);
+        panel.add(Box.createRigidArea(new Dimension(0, 10))); // Add space between elements
+        panel.add(songListScrollPane); // Add scrollable song list
         panel.add(createPlaylistButton);
-        panel.add(addToPlaylistButton);
 
         // Add panel to frame and display
         frame.add(panel);
         frame.setVisible(true);
     }
 
-    private void updateSongList() {
-        // Update the song list view with the songs from the MusicStore
+    private void updatePlaylistList() {
+        // Update the playlist list view with the playlists from MusicStore
+        playlistListModel.clear();
+        for (Playlist playlist : musicStore.getPlaylists()) {
+            playlistListModel.addElement(playlist.getName());
+        }
+    }
+
+    private void showSongsForPlaylist(String playlistName) {
+        // Find the playlist and display its songs
         songListModel.clear();
-        for (Song song : musicStore.getAllSongs()) {
-            songListModel.addElement(song.getName());
+        Playlist playlist = musicStore.getPlaylist(playlistName);
+        if (playlist != null) {
+            for (Song song : playlist.getSongs()) {
+                songListModel.addElement(song.getName());
+            }
         }
     }
 
@@ -97,41 +135,79 @@ public class MusicLibraryView {
         songListModel.clear();
 
         // Search for songs by name
+        ArrayList<String> results = new ArrayList<>();
         for (Song song : musicStore.getAllSongs()) {
             if (song.getName().toLowerCase().contains(query)) {
-                songListModel.addElement(song.getName());
+                String result = "Song: " + song.getName() + " | Artist: " + song.getArtist() + " | Album: " + song.getAlbum().getTitle();
+                results.add(result);
             }
         }
+
+        // Display results or message
+        if (results.isEmpty()) {
+            songListModel.addElement("No songs found.");
+        } else {
+            for (String result : results) {
+                songListModel.addElement(result);
+            }
+        }
+    }
+
+    private void searchAlbums() {
+        String query = searchField.getText().toLowerCase();
+        songListModel.clear();
+
+        // Search for albums by name
+        ArrayList<String> results = new ArrayList<>();
+        boolean found = false;
+        for (Album album : musicStore.getAlbums()) {
+            if (album.getTitle().toLowerCase().contains(query)) {
+                StringBuilder albumInfo = new StringBuilder();
+                albumInfo.append("Album: ").append(album.getTitle())
+                          .append(" | Artist: ").append(album.getArtist())
+                          .append(" | Year: ").append(album.getYear()).append("\nSongs:\n");
+
+                // Add songs in the album to the list
+                for (Song song : album.getSongs()) {
+                    albumInfo.append(" - ").append(song.getName()).append("\n");
+                }
+                results.add(albumInfo.toString());
+                found = true;
+            }
+        }
+
+        // Display results or message
+        if (!found) {
+            songListModel.addElement("No albums found.");
+        } else {
+            for (String result : results) {
+                songListModel.addElement(result);
+            }
+        }
+    }
+
+    private void showSongDetails(String selectedSong) {
+        // For now, just show a simple message with the selected song
+        JOptionPane.showMessageDialog(null, "You selected: " + selectedSong);
     }
 
     private void createPlaylist() {
-        String playlistName = playlistNameField.getText();
-        if (!playlistName.isEmpty()) {
-            libraryModel.createPlaylist(playlistName);
-            playlistListModel.addElement(playlistName);
-            playlistNameField.setText("");
+        String playlistName = JOptionPane.showInputDialog("Enter Playlist Name:");
+        if (playlistName != null && !playlistName.trim().isEmpty()) {
+            Playlist newPlaylist = new Playlist(playlistName, new ArrayList<>());
+            musicStore.getPlaylists().add(newPlaylist);
+
+            updatePlaylistList();
+            JOptionPane.showMessageDialog(null, "Playlist '" + playlistName + "' created.");
         }
     }
 
-    private void addSongToPlaylist() {
-        String selectedSong = songListView.getSelectedValue();
-        String selectedPlaylist = playlistListView.getSelectedValue();
-
-        if (selectedSong != null && selectedPlaylist != null) {
-            Song song = musicStore.searchSongByName(selectedSong);
-            Playlist playlist = musicStore.getPlaylist(selectedPlaylist);
-
-            if (song != null && playlist != null) {
-                playlist.addSong(song);
-                System.out.println("Song added to playlist: " + selectedPlaylist);
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        // Create and show the GUI
+    public static void main(String[] args) throws IOException {
+        // Create MusicStore and MusicLibraryView, and show GUI
+        String path = "albums/albums.txt";
+        MusicStore musicStore = MusicStore.initializer(path);
         SwingUtilities.invokeLater(() -> {
-            new MusicLibraryView().createAndShowGUI();
+            new MusicLibraryView(musicStore).createAndShowGUI();
         });
     }
 }
