@@ -17,11 +17,22 @@ public class Main {
 			String path = "albums/albums.txt";
 
 			MusicStore musicStore = MusicStore.initializer(path);
-
-			System.out.println("Music Store:");
-			for (Album album : musicStore.getAlbums()) {
+			
+			System.out.println("Albums:");
+			for(Album album: musicStore.getAlbums())
+			{
 				System.out.println(album.getTitle() + "_" + album.getArtist());
+		                  
+                
+				
 			}
+			System.out.println("All Songs:");
+			for (Song song : musicStore.getAllSongs()) {
+                System.out.println("Song: " + song.getName());
+                System.out.println("Artist: " + song.getArtist());
+                System.out.println("Album: " + song.getAlbum());
+                System.out.println(); // New line after each song
+            }
 			Scanner scanner = new Scanner(System.in);
 	        String plName;
 	        
@@ -56,7 +67,7 @@ public class Main {
             
             
             
-            F
+            
             
 	        
 		} catch (IOException e) {

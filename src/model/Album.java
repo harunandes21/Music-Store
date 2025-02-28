@@ -31,6 +31,7 @@ public class Album {
 		this.year = year;
 		this.songs = songs;
 	}
+	
 
 	public String getTitle() {
 		return title;

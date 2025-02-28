@@ -17,7 +17,7 @@ import model.Song;
 public class MusicStore {
 	private ArrayList<Album> albums;
 	private ArrayList<Playlist> playlists;
-	
+	private ArrayList<Song> allSongs;
 	public MusicStore() {
 		albums = new ArrayList<Album>();
 		playlists = new ArrayList<Playlist>();
@@ -38,6 +38,13 @@ public class MusicStore {
 			}
 		}
 		return null;
+	}
+	public ArrayList<Song> getAllSongs() {
+	    ArrayList<Song> allSongs = new ArrayList<>();
+	    for (Album album : albums) {
+	        allSongs.addAll(album.getSongs());
+	    }
+	    return allSongs;
 	}
 	
 	public Song searchSongByName(String name) {
@@ -102,7 +109,7 @@ public class MusicStore {
 
 		MusicStore store = new MusicStore();
 		BufferedReader reader = new BufferedReader(new FileReader("albums/albums.txt"));
-
+		 store.allSongs = new ArrayList<Song>();
 		String line;
 		while ((line = reader.readLine()) != null) {
 			String[] parts = line.split(",");
@@ -112,6 +119,7 @@ public class MusicStore {
 			String albumFilePath = "albums/" + albumTitle + "_" + artist + ".txt";
 			Album album = albumReader(albumFilePath);
 			store.albums.add(album);
+			store.allSongs.addAll(album.getSongs());
 
 		}
 		reader.close();
