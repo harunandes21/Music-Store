@@ -41,11 +41,7 @@ public class MusicStore {
 		return null;
 	}
 	public ArrayList<Song> getAllSongs() {
-	    ArrayList<Song> allSongs = new ArrayList<>();
-	    for (Album album : albums) {
-	        allSongs.addAll(album.getSongs());
-	    }
-	    return allSongs;
+	    return allSongs; 
 	}
 	
 	public Song searchSongByName(String name) {
