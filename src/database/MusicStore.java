@@ -48,29 +48,29 @@ public class MusicStore {
 	}
 	
 	public Song searchSongByName(String name) {
-		for (Album a : albums) {
-			for (Song s : a.getSongs()) {
+		
+			for (Song s : allSongs) {
 				if (s.getName().equalsIgnoreCase(name)) {
 					System.out.println("Song found: Album - " + s.getAlbum() + ", Title - "
 							+ s.getName() + ", Artist - " + s.getArtist());
 					return s;
 				}
 			}
-		}
+		
 		System.out.println("Song: " + name + " not found in database.");
 		return null;
 	}
 	
 	public Song searchSongByArtist(String name) {
-		for (Album a : albums) {
-			for (Song s : a.getSongs()) {
+		
+			for (Song s : allSongs) {
 				if (s.getArtist().equalsIgnoreCase(name)) {
 					System.out.println("Song found: Album - " + s.getAlbum() + ", Title - "
 							+ s.getName() + ", Artist - " + s.getArtist());
 					return s;
 				}
 			}
-		}
+		
 		System.out.println("No songs by " + name + " were found in database.");
 		return null;
 	}

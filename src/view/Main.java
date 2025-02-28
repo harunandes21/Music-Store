@@ -31,7 +31,7 @@ public class Main {
                 System.out.println("Song: " + song.getName());
                 System.out.println("Artist: " + song.getArtist());
                 System.out.println("Album: " + song.getAlbum().getTitle());
-                System.out.println(); // New line after each song
+                System.out.println(); 
             }
 			Scanner scanner = new Scanner(System.in);
 	        String plName;
@@ -45,7 +45,7 @@ public class Main {
             String albumName = scanner.nextLine();
             Album album = musicStore.searchAlbumByName(albumName);
             if (album != null) {
-                // 3. List all songs in that album
+               
                 System.out.println("\nSongs in the album '" + album.getTitle() + "':");
                 List<Song> songs = album.getSongs();
                 for (int i = 0; i < songs.size(); i++) {
