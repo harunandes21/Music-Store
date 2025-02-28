@@ -7,23 +7,18 @@ public class Song {
 
 	private String title;
 	private String artist;
+	private Album album;
 
-
+	/*
+	 * @pre name, author != null
+	 */
 	public Song(String name, String author) {
 		title=name;
 		artist=author;
 		
 	}
 
-	private Album album;
-	
-	/*
-	 * @pre name, author != null
-	 */
-	public Song(String name, String author, Album album) {
-
-		title = name;
-		artist = author;
+	public void setAlbum(Album album) {
 		this.album = album;
 	}
 	

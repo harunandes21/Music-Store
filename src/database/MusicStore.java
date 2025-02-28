@@ -140,7 +140,14 @@ public class MusicStore {
 		while ((songTitle = reader.readLine()) != null) {
 			songs.add(new Song(songTitle, artist));
 		}
-		return new Album(title, artist, genre, year, songs);
+		
+		Album album = new Album(title, artist, genre, year, songs);
+		
+		for (Song s : album.getSongs()) {
+			s.setAlbum(album);
+		}
+		
+		return album;
 	    }
 
 	}
