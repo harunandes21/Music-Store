@@ -37,20 +37,44 @@ public class MusicLibraryView {
         frame = new JFrame("Music Store");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
-        frame.setLayout(new BorderLayout());
 
-        JPanel searchPanel = createSearchPanel();
-        JPanel playlistPanel = createPlaylistPanel();
-        JPanel songPanel = createSongPanel();
-        JPanel buttonPanel = createButtonPanel();
+        // Use GridBagLayout for better control over component resizing
+        frame.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        
+        // Search panel
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        frame.add(createSearchPanel(), gbc);
 
-        frame.add(searchPanel, BorderLayout.NORTH);
-        frame.add(playlistPanel, BorderLayout.WEST);
-        frame.add(songPanel, BorderLayout.CENTER);
-        frame.add(buttonPanel, BorderLayout.SOUTH);
+        // Playlist panel (use a fixed width and weight for resizing control)
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 0.3; // Make the playlist panel take 30% of the space
+        frame.add(createPlaylistPanel(), gbc);
+
+        // Song panel (fill the remaining space)
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 0.7; // Song panel takes 70% of the space
+        frame.add(createSongPanel(), gbc);
+
+        // Button panel
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        frame.add(createButtonPanel(), gbc);
 
         frame.setVisible(true);
     }
+
 
     private JPanel createSearchPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
