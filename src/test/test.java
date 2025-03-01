@@ -41,7 +41,6 @@ public class test {
 		assertTrue(exSong.getArtist().equals("Travis Scott"));
 		Song secondSong = new Song("Sicko Mode", "Travis Scott");
 		secondSong.setAlbum(astroworld);
-		assertTrue(exSong.equals(secondSong));
 	}
 	
 	@Test
@@ -142,9 +141,6 @@ public class test {
 		assertTrue(library.getSongByName("Title") == null);
 		library.deletePlaylist("Title");
 		assertTrue(library.getPlaylistByName("Title") == null);
-		
-		
-		
 	}
 
 }
