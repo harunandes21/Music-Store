@@ -162,12 +162,9 @@ public class MusicLibraryView {
         JButton deletePlaylistButton = new JButton("Delete Playlist");
         deletePlaylistButton.addActionListener(e -> {
             String selectedPlaylistName = playlistListView.getSelectedValue();
-            boolean flag= libraryModel.getPlaylistByName(selectedPlaylistName).getIsAlbum();
+            
             if (selectedPlaylistName != null) {
-            	if( flag==true ) {
-                	JOptionPane.showMessageDialog(frame, "Cannot modify album.");
-            	return;
-            	}
+            	
                 int option = JOptionPane.showConfirmDialog(frame,
                         "Are you sure you want to delete the playlist '" + selectedPlaylistName + "'?",
                         "Confirm Deletion", JOptionPane.YES_NO_OPTION);
@@ -307,8 +304,9 @@ public class MusicLibraryView {
             java.util.ArrayList<Song> results = musicStore.performSearch(searchQuery, searchType);
             songTableModel.setRowCount(0);
             for (Song song : results) {
+            	String rating = (song.getRating() == 0) ? "" : String.valueOf(song.getRating());
                 songTableModel.addRow(new Vector<>(java.util.Arrays.asList(
-                        song.getName(), song.getArtist(),song.getAlbum().getTitle(), song.getRating() )));
+                        song.getName(), song.getArtist(),song.getAlbum().getTitle(), rating )));
             }
         }
     }
@@ -324,10 +322,10 @@ public class MusicLibraryView {
                     JOptionPane.QUESTION_MESSAGE, null, options, "1");
             
             if (ratingStr != null) {
-                double rating = Double.parseDouble(ratingStr);
+                int rating = Integer.parseInt(ratingStr);
                 song.setRating(rating);
 
-                if (rating == 5.0) {
+                if (rating == 5) {
                     Playlist favorites = musicStore.getPlaylist("Favorites");
                     if (!favorites.getSongs().contains(song)) {
                         favorites.addSong(song);
@@ -348,6 +346,7 @@ public class MusicLibraryView {
             libraryModel.createPlaylist(playlistName);
             updatePlaylistList();
         }
+        else {JOptionPane.showMessageDialog(frame, "Invalid Input");}
     }
 
     private void addSongToPlaylist() {
@@ -453,12 +452,12 @@ public class MusicLibraryView {
                 songTableModel.addRow(new Vector<>(java.util.Arrays.asList("No songs in this playlist", "", "")));
             } else {
                 for (Song song : playlist.getSongs()) {
-                	
+                	String rating = (song.getRating() == 0) ? "" : String.valueOf(song.getRating());
                     Object[] rowData = {
                         song.getName(),
                         song.getArtist(),
                         song.getAlbum().getTitle(),
-                        song.getRating()
+                        rating
                     };
                     songTableModel.addRow(new Vector<>(java.util.Arrays.asList(rowData)));
                 }

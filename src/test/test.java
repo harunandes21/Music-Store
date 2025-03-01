@@ -20,7 +20,7 @@ public class test {
 		Song exSong = new Song("Sicko Mode", "Travis Scott");
 		Album astroworld = new Album("Astroworld", "Travis Scott", "Rap", "2018", new ArrayList<Song>());
 		exSong.setAlbum(astroworld);
-		exSong.setRating(5.0);
+		exSong.setRating(5);
 		assertTrue((exSong.getRating() == 5) && (exSong.getFavorite() == true));
 		exSong.setFavorite(false);
 		assertTrue((exSong.getFavorite() == false) && (exSong.getRating() == 5));

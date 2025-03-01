@@ -3,7 +3,7 @@ package model;
 public class Song {
 	
 	private boolean favorite;
-	private double rating;
+	private int rating;
 
 	private String title;
 	private String artist;
@@ -24,8 +24,8 @@ public class Song {
 		this.album = album;
 	}
 	
-	public void setRating(double rating) {
-		if (rating == 5.0) {
+	public void setRating(int rating) {
+		if (rating == 5) {
 			favorite = true;
 		}
 		this.rating = rating;
@@ -39,7 +39,7 @@ public class Song {
 	
 	public String getArtist() {return artist;}
 	
-	public double getRating() {return rating;}
+	public int getRating() {return rating;}
 	
 	public boolean getFavorite() {return favorite;}
 	
