@@ -1,4 +1,10 @@
-
+/*
+ * Authors: Lucas Hamacher and Harun Andeshmand
+ * Functionality: 
+ * 		holds a playlist object with data like name, songs, and whether or not it is an album. 
+ * 		contains methods for setting, getting, and adding and removing song objects
+ * 		from internal list.
+ */
 
 package model;
 
@@ -40,12 +46,4 @@ public class Playlist {
 			}
 		}
 	}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-	
-	
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }

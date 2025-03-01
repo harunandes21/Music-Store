@@ -1,3 +1,9 @@
+/*
+ * Authors: Lucas Hamacher and Harun Andeshmand
+ * Functionality: 
+ * 		tests all classes of the project within model and database with 100% statement coverage
+ */
+
 package test;
 
 import static org.junit.Assert.*;
@@ -24,22 +30,13 @@ public class test {
 		Song exSong = new Song("Sicko Mode", "Travis Scott");
 		Album astroworld = new Album("Astroworld", "Travis Scott", "Rap", "2018", new ArrayList<Song>());
 		exSong.setAlbum(astroworld);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 		exSong.setRating(5);
-		assertTrue((exSong.getRating() == 5) && (exSong.getFavorite() == true));
+		assertTrue(exSong.getRating() == 5);
 		
-		assertTrue((exSong.getFavorite() == false) && (exSong.getRating() == 5));
-=======
-		exSong.setRating(5.0);
+		exSong.setRating(5);
 		assertTrue(exSong.getRating() == 5);
 		assertTrue(exSong.getRating() == 5);
->>>>>>> Stashed changes
-=======
-		exSong.setRating(5.0);
-		assertTrue(exSong.getRating() == 5);
-		assertTrue(exSong.getRating() == 5);
->>>>>>> Stashed changes
+
 		assertTrue((exSong.getName().equals("Sicko Mode")) && (exSong.getAlbum().getTitle().equals("Astroworld")));
 		assertTrue(exSong.getArtist().equals("Travis Scott"));
 		Song secondSong = new Song("Sicko Mode", "Travis Scott");
@@ -71,7 +68,7 @@ public class test {
 	public void testPlaylist() {
 		Playlist exPlaylist = new Playlist("2025", new ArrayList<Song>());
 		exPlaylist.setAlbum();
-		assertTrue(exPlaylist.getIsAlbum() == true);
+		assertTrue(exPlaylist.isAlbum() == true);
 		assertTrue(exPlaylist.getName().equals("2025"));
 		exPlaylist.setName("2026");
 		assertTrue(exPlaylist.getName().equals("2026"));

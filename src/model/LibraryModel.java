@@ -1,4 +1,13 @@
+/*
+ * Authors: Lucas Hamacher and Harun Andeshmand
+ * Functionality: 
+ * 		holds a music store object and maintains storage of a user's music library
+ * 		contains methods for getting, setting as well as creating playlists, adding songs, removing songs,
+ * 		and deleting playlists altogether.
+ */
+
 package model;
+
 import java.util.ArrayList;
 import database.MusicStore;
 
@@ -46,15 +55,7 @@ public class LibraryModel {
         playlist.addSong(song);
         System.out.println("Song '" + songName + "' added to playlist '" + playlistName + "'.");
     }
-    
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    
-    
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
     public Playlist getPlaylistByName(String name) {
         return musicStore.getPlaylist(name);
     }

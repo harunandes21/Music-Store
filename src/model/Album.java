@@ -1,10 +1,9 @@
 /*
- * Author: Lucas Hamacher
- * Functionality:
- * 		Creates an object for an ablum, storing songs as well as data specific to an individual album.
- * 		Class contains methods for retrieval and adding to its internal list.
+ * Authors: Lucas Hamacher and Harun Andeshmand
+ * Functionality: 
+ * 		holds an album object with data like artist, year, title, genre, and songs.
+ * 		contains methods for getting and adding songs to internal list.
  */
-
 package model;
 
 import java.util.ArrayList;

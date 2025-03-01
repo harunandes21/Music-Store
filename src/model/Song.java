@@ -1,8 +1,14 @@
+/*
+ * Authors: Lucas Hamacher and Harun Andeshmand
+ * Functionality: 
+ * 		holds a Song object, containing data like title, artist, and album.
+ * 		contains methods for setting and getting attributes
+ */
+
 package model;
 
 public class Song {
 	
-	private boolean favorite;
 	private int rating;
 
 	private String title;
@@ -17,7 +23,6 @@ public class Song {
 		artist=author;
 		
 		rating = 0;
-		favorite = false;
 	}
 
 	public void setAlbum(Album album) {
@@ -25,9 +30,6 @@ public class Song {
 	}
 	
 	public void setRating(int rating) {
-		if (rating == 5) {
-			favorite = true;
-		}
 		this.rating = rating;
 	}
 	

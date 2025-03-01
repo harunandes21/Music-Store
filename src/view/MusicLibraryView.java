@@ -1,3 +1,10 @@
+/*
+ * Authors: Lucas Hamacher and Harun Andeshmand
+ * Functionality: 
+ * 		maintains a gui representing the music library of an individual user. Contains buttons for creating and removing playlists,
+ * 		searching for songs by name/artist or album, favoriting, and adding/removing songs from playlists.
+ */
+
 package view;
 
 import javax.swing.*;

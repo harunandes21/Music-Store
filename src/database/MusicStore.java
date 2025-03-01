@@ -1,3 +1,10 @@
+/*
+ * Authors: Lucas Hamacher and Harun Andeshmand
+ * Functionality: 
+ * 		represents a music store object with data like playlists, albums, and allsongs.
+ * 		contains methods for getting, searching, adding, and reading in data from a file.
+ */
+
 package database;
 
 import java.io.*;
