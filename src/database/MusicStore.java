@@ -43,7 +43,7 @@ public class MusicStore {
 	public ArrayList<Song> getAllSongs() {
 	    return allSongs; 
 	}
-	
+	// used for library 
 	public Song searchSongByName(String name) {
 		
 			for (Song s : allSongs) {
@@ -58,50 +58,11 @@ public class MusicStore {
 		return null;
 	}
 	
-	public Song searchSongByArtist(String name) {
-		
-			for (Song s : allSongs) {
-				if (s.getArtist().equalsIgnoreCase(name)) {
-					System.out.println("Song found: Album - " + s.getAlbum().getTitle() + ", Title - "
-							+ s.getName() + ", Artist - " + s.getArtist());
-					return s;
-				}
-			}
-		
-		System.out.println("No songs by " + name + " were found in database.");
-		return null;
-	}
 	
-	public Album searchAlbumByName(String name) {
-		for (Album a : albums) {
-			if (a.getTitle().equalsIgnoreCase(name)) {
-				String msg = "Artist: " + a.getArtist() + "\nAlbum: " + a.getTitle() + "\nSongs: \n";
-				for (Song song : a.getSongs()) {
-					msg += song.getName() + "\n";
-				}
-				System.out.print(msg);
-				return a;
-			}
-		}
-		System.out.println("Album: " + name + " not found in database.");	
-		return null;
-	}
 	
-	public Album searchAlbumByArtist(String name) {
-		for (Album a : albums) {
-			 if (a.getArtist().equalsIgnoreCase(name)) {
-				String msg = "Artist: " + a.getArtist() + "\nAlbum: " + a.getTitle() + "\nSongs: \n";
-				for (Song song : a.getSongs()) {
-					msg += song.getName() + "\n";
-				}
-				System.out.print(msg);
-				return a;
-			}
-		}
-		System.out.println("No albums by " + name + " were found in database.");		 
-		return null;
-
-	}
+	
+	
+	
 	public static MusicStore initializer(String path) throws IOException {
 
 		MusicStore store = new MusicStore();
@@ -148,6 +109,33 @@ public class MusicStore {
 	    }
 
 	}
+	//used for music store
+	
+	public ArrayList<Song> performSearch(String searchQuery, String searchType) {
+	    ArrayList<Song> results = new ArrayList<>();
+	    
+	    if (searchType.equals("Song")) {
+	      
+	        for (Song song : getAllSongs()) {
+	            if (song.getName().toLowerCase().contains(searchQuery.toLowerCase()) || 
+	                song.getArtist().toLowerCase().contains(searchQuery.toLowerCase())) {
+	                results.add(song);
+	            }
+	        }
+	    } else if (searchType.equals("Album")) {
+	        
+	        for (Song song : getAllSongs()) {
+	            if (song.getAlbum().getTitle().toLowerCase().contains(searchQuery.toLowerCase()) || 
+	                song.getAlbum().getArtist().toLowerCase().contains(searchQuery.toLowerCase())) {
+	                results.add(song);
+	            }
+	        }
+	    }
+	    
+	    return results;
+	}
+
+	
 	
 	
 }

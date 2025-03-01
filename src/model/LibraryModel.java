@@ -59,12 +59,29 @@ public class LibraryModel {
     
     public void removeSongFromPlaylist(String playlistName, String songName) {
         Playlist playlist = getPlaylistByName(playlistName);
-        if (playlist == null) {
-            System.out.println("Playlist '" + playlistName + "' not found.");
-            return;
+        if (playlist != null) {
+            Song songToRemove = null;
+            for (Song song : playlist.getSongs()) {
+                if (song.getName().equals(songName)) {
+                    songToRemove = song;
+                    break;
+                }
+            }
+            if (songToRemove != null) {
+                playlist.getSongs().remove(songToRemove);
+            }
         }
-        playlist.removeSong(new Song(songName, ""));
-        System.out.println("Song '" + songName + "' removed from playlist '" + playlistName + "'.");
+    }
+
+    public void deletePlaylist(String playlistName) {
+        Playlist playlist = getPlaylistByName(playlistName);
+        if (playlist != null) {
+            userPlaylists.remove(playlist); 
+            musicStore.getPlaylists().remove(playlist); 
+            System.out.println("Playlist '" + playlistName + "' deleted.");
+        } else {
+            System.out.println("Playlist '" + playlistName + "' not found.");
+        }
     }
     
 }
