@@ -4,4 +4,5 @@ module CSCLA1{
 	requires junit;
     opens view to javafx.fxml;
     exports view;
+    exports test;
 }

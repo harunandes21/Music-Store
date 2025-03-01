@@ -9,9 +9,13 @@ import model.Album;
 
 import org.junit.Test;
 
+
 public class test {
 
 	@Test
+	/*
+	 * Achieves 100% coverage of Song class, passed
+	 */
 	public void testSong() {
 		Song exSong = new Song("Sicko Mode", "Travis Scott");
 		Album astroworld = new Album("Astroworld", "Travis Scott", "Rap", "2018", new ArrayList<Song>());
@@ -25,6 +29,20 @@ public class test {
 		Song secondSong = new Song("Sicko Mode", "Travis Scott");
 		secondSong.setAlbum(astroworld);
 		assertTrue(exSong.equals(secondSong));
+	}
+	
+	@Test
+	public void testAlbum() {
+		Album exAlbum = new Album("The Forever Story", "JID", "Rap", "2023", new ArrayList<Song>());
+		assertTrue(exAlbum.getArtist().equals("JID"));
+		assertTrue(exAlbum.getTitle().equals("The Forever Story"));
+		assertTrue(exAlbum.getYear().equals("2023"));
+		assertTrue(exAlbum.getGenre().equals("Rap"));
+		Song exSong = new Song("2007", "JID");
+		ArrayList<Song> songList = new ArrayList<Song>();
+		songList.add(exSong);
+		exAlbum.addSong(exSong);
+		assertTrue(exAlbum.getSongs().equals(songList));
 	}
 
 }
