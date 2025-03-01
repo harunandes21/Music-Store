@@ -72,6 +72,17 @@ public class LibraryModel {
             }
         }
     }
+    public Song getSongByName(String songName) {
+        for (Playlist playlist : userPlaylists) {
+            for (Song song : playlist.getSongs()) {
+                if (song.getName().equals(songName)) {
+                    return song;
+                }
+            }
+        }
+        return null;  
+    }
+
 
     public void deletePlaylist(String playlistName) {
         Playlist playlist = getPlaylistByName(playlistName);

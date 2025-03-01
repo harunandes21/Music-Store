@@ -36,7 +36,7 @@ public class MusicLibraryView {
     public void createAndShowGUI() {
         frame = new JFrame("Music Store");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(900, 600);
 
         // Use GridBagLayout for better control over component resizing
         frame.setLayout(new GridBagLayout());
@@ -146,6 +146,8 @@ public class MusicLibraryView {
         addToPlaylistButton.addActionListener(e -> addSongToPlaylist());
         panel.add(addToPlaylistButton);
 
+        
+        
         JButton removeFromPlaylistButton = new JButton("Remove from Playlist");
         removeFromPlaylistButton.addActionListener(e -> removeSongFromPlaylist());
         panel.add(removeFromPlaylistButton);
@@ -167,9 +169,14 @@ public class MusicLibraryView {
         });
 
         panel.add(deletePlaylistButton);
+        JButton rateSongButton = new JButton("Rate Song");
+        rateSongButton.addActionListener(e -> rateSong());
+        panel.add(rateSongButton);
+        
 
         return panel;
     }
+    
 
     private void performSearch() {
         String searchQuery = searchField.getText();
@@ -182,6 +189,35 @@ public class MusicLibraryView {
                         song.getName(), song.getArtist(),song.getAlbum().getTitle(), song.getRating() )));
             }
         }
+    }
+    private void rateSong() {
+    	int row = songTable.getSelectedRow();
+    	if (row >= 0) {
+            String songName = (String) songTableModel.getValueAt(row, 0);
+        Song song = musicStore.searchSongByName(songName);
+
+        if (song != null) {
+            String[] options = {"1", "2", "3", "4", "5"};
+            String ratingStr = (String) JOptionPane.showInputDialog(frame, "Rate the song (1-5):", "Rating", 
+                    JOptionPane.QUESTION_MESSAGE, null, options, "1");
+            
+            if (ratingStr != null) {
+                double rating = Double.parseDouble(ratingStr);
+                song.setRating(rating);
+
+                if (rating == 5.0) {
+                    Playlist favorites = musicStore.getPlaylist("Favorites");
+                    if (!favorites.getSongs().contains(song)) {
+                        favorites.addSong(song);
+                        JOptionPane.showMessageDialog(frame, "Song added to Favorites playlist.");
+                    }
+                }
+
+                JOptionPane.showMessageDialog(frame, "Song rated " + rating);
+            }
+           }
+    	}
+    	else return;
     }
 
     private void createPlaylist() {
