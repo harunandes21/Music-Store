@@ -25,10 +25,16 @@ public class test {
 		Album astroworld = new Album("Astroworld", "Travis Scott", "Rap", "2018", new ArrayList<Song>());
 		exSong.setAlbum(astroworld);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		exSong.setRating(5);
 		assertTrue((exSong.getRating() == 5) && (exSong.getFavorite() == true));
 		
 		assertTrue((exSong.getFavorite() == false) && (exSong.getRating() == 5));
+=======
+		exSong.setRating(5.0);
+		assertTrue(exSong.getRating() == 5);
+		assertTrue(exSong.getRating() == 5);
+>>>>>>> Stashed changes
 =======
 		exSong.setRating(5.0);
 		assertTrue(exSong.getRating() == 5);

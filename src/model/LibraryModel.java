@@ -48,8 +48,11 @@ public class LibraryModel {
     }
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     
     
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     public Playlist getPlaylistByName(String name) {
