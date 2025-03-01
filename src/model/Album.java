@@ -47,7 +47,7 @@ public class Album {
 	}
 
 	public ArrayList<Song> getSongs() {
-		return songs;
+		return new ArrayList<Song>(songs);
 	}
 	
 	public void addSong(Song song) {
