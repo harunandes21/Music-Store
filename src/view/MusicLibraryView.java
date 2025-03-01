@@ -7,9 +7,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Vector;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 import model.Song;
 import model.Playlist;
+import model.Album;
 import model.LibraryModel;
 import database.MusicStore;
 
@@ -36,7 +43,7 @@ public class MusicLibraryView {
     public void createAndShowGUI() {
         frame = new JFrame("Music Store");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 600);
+        frame.setSize(950, 600);
 
         // Use GridBagLayout for better control over component resizing
         frame.setLayout(new GridBagLayout());
@@ -155,7 +162,12 @@ public class MusicLibraryView {
         JButton deletePlaylistButton = new JButton("Delete Playlist");
         deletePlaylistButton.addActionListener(e -> {
             String selectedPlaylistName = playlistListView.getSelectedValue();
+            boolean flag= libraryModel.getPlaylistByName(selectedPlaylistName).getIsAlbum();
             if (selectedPlaylistName != null) {
+            	if( flag==true ) {
+                	JOptionPane.showMessageDialog(frame, "Cannot modify album.");
+            	return;
+            	}
                 int option = JOptionPane.showConfirmDialog(frame,
                         "Are you sure you want to delete the playlist '" + selectedPlaylistName + "'?",
                         "Confirm Deletion", JOptionPane.YES_NO_OPTION);
@@ -163,7 +175,9 @@ public class MusicLibraryView {
                 if (option == JOptionPane.YES_OPTION) {
                     deletePlaylist(selectedPlaylistName);
                 }
-            } else {
+            } 
+             
+            else {
                 JOptionPane.showMessageDialog(frame, "No playlist selected.");
             }
         });
@@ -173,9 +187,117 @@ public class MusicLibraryView {
         rateSongButton.addActionListener(e -> rateSong());
         panel.add(rateSongButton);
         
+        JButton addAlbumButton = new JButton("Add Album");
+        addAlbumButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Call the method to show the album search window
+                openAlbumSearchWindow();
+            }
+        });
+        panel.add(addAlbumButton);
+
 
         return panel;
     }
+    
+    private void openAlbumSearchWindow() {
+        // Open a new search window
+        JFrame searchWindow = new JFrame("Search Albums");
+        searchWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        JTextField searchField = new JTextField(20);
+        JButton searchButton = new JButton("Search");
+
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchQuery = searchField.getText();
+                List<Album> searchResults = searchAlbums(searchQuery);
+                if (!searchResults.isEmpty()) {
+                    showSearchResults(searchResults);
+                } else {
+                    JOptionPane.showMessageDialog(searchWindow, "No albums found.", "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+
+        searchWindow.setLayout(new FlowLayout());
+        searchWindow.add(new JLabel("Search for an album:"));
+        searchWindow.add(searchField);
+        searchWindow.add(searchButton);
+        searchWindow.setSize(300, 150);
+        searchWindow.setVisible(true);
+    }
+    
+    private List<Album> searchAlbums(String query) {
+        List<Album> results = new ArrayList<>();
+        for (Album album : musicStore.getAlbums()) {
+            if (album.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                results.add(album);
+            }
+        }
+        return results;
+    }
+    
+    private void showSearchResults(List<Album> searchResults) {
+        JFrame resultWindow = new JFrame("Select Album");
+        resultWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        JComboBox<String> albumDropdown = new JComboBox<>();
+        for (Album album : searchResults) {
+            albumDropdown.addItem(album.getTitle());
+        }
+
+        JButton confirmButton = new JButton("Confirm");
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedAlbumName = (String) albumDropdown.getSelectedItem();
+                Album selectedAlbum = findAlbumByName(selectedAlbumName);
+                if (selectedAlbum != null) {
+                    addAlbumToLibrary(selectedAlbum);
+                    JOptionPane.showMessageDialog(resultWindow, selectedAlbum.getTitle() + " has been added to your library as a playlist.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    resultWindow.dispose();
+                }
+            }
+        });
+
+        resultWindow.setLayout(new FlowLayout());
+        resultWindow.add(new JLabel("Select an album:"));
+        resultWindow.add(albumDropdown);
+        resultWindow.add(confirmButton);
+        resultWindow.setSize(300, 150);
+        resultWindow.setVisible(true);
+    }
+    private void addAlbumToLibrary(Album album) {
+        // Create a new playlist with the album's name
+        Playlist newPlaylist = new Playlist(album.getTitle(),album.getSongs());
+        
+        // Add all songs from the selected album to the playlist
+        //newPlaylist.addSongs(album.getSongs());
+        
+        // Add the new playlist to the library (assuming `library` is a List or Map of playlists)
+        libraryModel.addPlaylist(newPlaylist);
+        
+        // Optionally, update the UI to show the new playlist
+        updatePlaylistList();
+    }
+    
+
+    
+    private Album findAlbumByName(String name) {
+        for (Album album : musicStore.getAlbums()) {
+            if (album.getTitle().equals(name)) {
+                return album;
+            }
+        }
+        return null;
+    }
+
+
+
+
     
 
     private void performSearch() {
@@ -247,12 +369,15 @@ public class MusicLibraryView {
 
             // Show the dialog
             int option = JOptionPane.showConfirmDialog(frame, panel, "Add Song to Playlist", JOptionPane.OK_CANCEL_OPTION);
+            
 
             // If the user presses OK, proceed with adding the song to the selected playlist
             if (option == JOptionPane.OK_OPTION) {
                 String playlistName = (String) playlistDropdownPopup.getSelectedItem();
                 if (playlistName != null && !playlistName.trim().isEmpty()) {
                     Playlist selectedPlaylist = musicStore.getPlaylist(playlistName);
+                    	if(selectedPlaylist.getIsAlbum()==true)
+                    	{JOptionPane.showMessageDialog(frame, "Cannot modify album."); return;}
                     
                     // Check if the song already exists in the playlist
                     for (Song song : selectedPlaylist.getSongs()) {
@@ -281,9 +406,10 @@ public class MusicLibraryView {
             int row = songTable.getSelectedRow();
             if (row >= 0) {
                 String songName = (String) songTableModel.getValueAt(row, 0);
-
+                Playlist chosenPlaylist= libraryModel.getPlaylistByName(playlistName);
                 int option = JOptionPane.showConfirmDialog(frame, "Are you sure you want to remove the song '" + songName + "' from the playlist '" + playlistName + "'?", "Remove Song", JOptionPane.YES_NO_OPTION);
-
+                if(chosenPlaylist.getIsAlbum()==true)
+            	{JOptionPane.showMessageDialog(frame, "Cannot modify album."); return;}
                 if (option == JOptionPane.YES_OPTION) {
                     libraryModel.removeSongFromPlaylist(playlistName, songName);
                     showSongsForPlaylist(playlistName);

@@ -17,6 +17,14 @@ public class LibraryModel {
     }
     
     
+    public void addPlaylist(Playlist playlist) {
+        playlist.setAlbum();
+        userPlaylists.add(playlist);
+        musicStore.getPlaylists().add(playlist);  
+        
+        System.out.println("Playlist '" + playlist.getName() + "' added to library.");
+    }
+
     public void createPlaylist(String name) {
         
             Playlist newPlaylist = new Playlist(name, new ArrayList<>());
@@ -29,6 +37,7 @@ public class LibraryModel {
     
     public void addSongToPlaylist(String playlistName, String songName) {
         Playlist playlist = musicStore.getPlaylist(playlistName);
+        
         Song song = musicStore.searchSongByName(songName);
         if (song == null) {
             System.out.println("Song '" + songName + "' not found.");
