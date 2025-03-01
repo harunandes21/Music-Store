@@ -234,7 +234,10 @@ public class MusicLibraryView {
     }
 
     public void deletePlaylist(String playlistName) {
-    	if (playlistName.equals("Favorites")) {return;}
+    	if (playlistName.equals("Favorites")) {
+    		JOptionPane.showMessageDialog(frame, "Playlist '" + playlistName + "' could not be deleted.");
+    		return;
+    	}
     	System.out.println(playlistName);
         Playlist playlist = libraryModel.getPlaylistByName(playlistName);
         if (playlist != null) {
