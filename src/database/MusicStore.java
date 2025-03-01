@@ -92,6 +92,8 @@ public class MusicStore {
 		String songTitle;
 		while ((songTitle = reader.readLine()) != null) {
 			songs.add(new Song(songTitle, artist));
+			
+			
 		}
 		
 		Album album = new Album(title, artist, genre, year, songs);

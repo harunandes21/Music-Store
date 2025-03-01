@@ -30,7 +30,7 @@ public class MusicLibraryView {
         this.musicStore = musicStore;
         this.libraryModel = new LibraryModel(musicStore);
         playlistListModel = new DefaultListModel<>();
-        songTableModel = new DefaultTableModel(new String[]{"Title", "Artist", "Album"}, 0);
+        songTableModel = new DefaultTableModel(new String[]{"Title", "Artist", "Album","Rating"}, 0);
     }
 
     public void createAndShowGUI() {
@@ -179,7 +179,7 @@ public class MusicLibraryView {
             songTableModel.setRowCount(0);
             for (Song song : results) {
                 songTableModel.addRow(new Vector<>(java.util.Arrays.asList(
-                        song.getName(), song.getArtist(), song.getAlbum().getTitle())));
+                        song.getName(), song.getArtist(),song.getAlbum().getTitle(), song.getRating() )));
             }
         }
     }
@@ -291,10 +291,12 @@ public class MusicLibraryView {
                 songTableModel.addRow(new Vector<>(java.util.Arrays.asList("No songs in this playlist", "", "")));
             } else {
                 for (Song song : playlist.getSongs()) {
+                	
                     Object[] rowData = {
                         song.getName(),
                         song.getArtist(),
-                        song.getAlbum().getTitle()
+                        song.getAlbum().getTitle(),
+                        song.getRating()
                     };
                     songTableModel.addRow(new Vector<>(java.util.Arrays.asList(rowData)));
                 }
