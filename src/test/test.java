@@ -22,7 +22,7 @@ public class test {
 		exSong.setAlbum(astroworld);
 		exSong.setRating(5);
 		assertTrue((exSong.getRating() == 5) && (exSong.getFavorite() == true));
-		exSong.setFavorite(false);
+		
 		assertTrue((exSong.getFavorite() == false) && (exSong.getRating() == 5));
 		assertTrue((exSong.getName().equals("Sicko Mode")) && (exSong.getAlbum().getTitle().equals("Astroworld")));
 		assertTrue(exSong.getArtist().equals("Travis Scott"));

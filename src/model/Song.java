@@ -31,7 +31,6 @@ public class Song {
 		this.rating = rating;
 	}
 	
-	public void setFavorite(boolean b) {favorite = b;}
 	
 	public String getName() {return title;}
 	
@@ -41,8 +40,7 @@ public class Song {
 	
 	public int getRating() {return rating;}
 	
-	public boolean getFavorite() {return favorite;}
 	
-	public boolean equals(Song song) {return ((song.getName() == title) && (song.getArtist() == artist) && (song.getAlbum() == album));}
+	
 	
 }

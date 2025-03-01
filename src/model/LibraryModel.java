@@ -16,7 +16,7 @@ public class LibraryModel {
         return musicStore.getAllSongs();
     }
     
-    
+    // adding a whole album to our library
     public void addPlaylist(Playlist playlist) {
         playlist.setAlbum();
         userPlaylists.add(playlist);
@@ -24,7 +24,7 @@ public class LibraryModel {
         
         System.out.println("Playlist '" + playlist.getName() + "' added to library.");
     }
-
+    //creating a new playlist
     public void createPlaylist(String name) {
         
             Playlist newPlaylist = new Playlist(name, new ArrayList<>());
@@ -47,20 +47,7 @@ public class LibraryModel {
         System.out.println("Song '" + songName + "' added to playlist '" + playlistName + "'.");
     }
     
-    public void listAllPlaylists() {
-        ArrayList<Playlist> playlists = musicStore.getPlaylists();
-        if (playlists.isEmpty()) {
-            System.out.println("No playlists available.");
-            return;
-        }
-        System.out.println("Playlists:");
-        for (Playlist p : playlists) {
-            System.out.println("Playlist: " + p.getName());
-            for (Song s : p.getSongs()) {
-                System.out.println(" - " + s.getName() + " by " + s.getArtist());
-            }
-        }
-    }
+    
     
     public Playlist getPlaylistByName(String name) {
         return musicStore.getPlaylist(name);

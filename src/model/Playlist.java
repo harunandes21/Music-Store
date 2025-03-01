@@ -1,9 +1,4 @@
-/*
- * Author: Lucas Hamacher
- * Functionality:
- * 		Creates an object representing a playlist, which contists an Array of Strings (songs).
- * 		Contains methods for setting and getting as well as sorting and shuffling.
- */
+
 
 package model;
 
@@ -28,7 +23,7 @@ public class Playlist {
 		isAlbum = true;
 	}
 	
-	public boolean getIsAlbum() {return isAlbum;}
+	public boolean isAlbum() {return isAlbum;}
 	
 	public String getName() {return name;}
 	
@@ -46,15 +41,5 @@ public class Playlist {
 		}
 	}
 	
-	public void shuffle() {
-		Collections.shuffle(songs);
-	}
 	
-	public void sortByNames() {
-		songs.sort((a,b) -> (a.getName().compareTo(b.getName())));
-	}
-	
-	public void sortByYear() {
-		songs.sort((a,b) -> (a.getAlbum().getYear().compareTo(b.getAlbum().getYear())));
-	}
 }

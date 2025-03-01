@@ -43,7 +43,7 @@ public class MusicStore {
 	public ArrayList<Song> getAllSongs() {
 	    return allSongs; 
 	}
-	// used for library 
+	// used for library methods. searcing son while adding it to a playlist.
 	public Song searchSongByName(String name) {
 		
 			for (Song s : allSongs) {
@@ -57,7 +57,7 @@ public class MusicStore {
 		System.out.println("Song: " + name + " not found in database.");
 		return null;
 	}
-	
+	// opens the  albums txt, and then calls the album reader
 	public static MusicStore initializer(String path) throws IOException {
 
 		MusicStore store = new MusicStore();
@@ -78,7 +78,7 @@ public class MusicStore {
 		reader.close();
 		return store;
 	}
-	
+	// takes the path from initializer, opens and reads albums, creates song and album lists.
 	private static Album albumReader(String filePath) throws IOException {
 		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 		String data = reader.readLine();
@@ -107,7 +107,7 @@ public class MusicStore {
 
 	}
 	//used for music store
-	
+	// can search 2 types, song or album. works for both title and author.
 	public ArrayList<Song> performSearch(String searchQuery, String searchType) {
 	    ArrayList<Song> results = new ArrayList<>();
 	    
