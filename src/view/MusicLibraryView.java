@@ -129,7 +129,7 @@ public class MusicLibraryView {
         JButton deletePlaylistButton = new JButton("Delete Playlist");
         deletePlaylistButton.addActionListener(e -> {
             String selectedPlaylistName = playlistListView.getSelectedValue();
-            if (selectedPlaylistName != null) {
+            if (selectedPlaylistName != null || selectedPlaylistName.equals("Favorites")) {
                 int option = JOptionPane.showConfirmDialog(frame,
                         "Are you sure you want to delete the playlist '" + selectedPlaylistName + "'?",
                         "Confirm Deletion", JOptionPane.YES_NO_OPTION);

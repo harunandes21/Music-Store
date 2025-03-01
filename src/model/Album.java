@@ -16,9 +16,6 @@ public class Album {
 	private String title;
 	private String genre;
 	private ArrayList<Song> songs;
-
-
-	
 	
 	/*
 	 * @pre title, artis, genre, year, songs != null

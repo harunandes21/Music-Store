@@ -16,6 +16,8 @@ public class Song {
 		title=name;
 		artist=author;
 		
+		rating = 0;
+		favorite = false;
 	}
 
 	public void setAlbum(Album album) {

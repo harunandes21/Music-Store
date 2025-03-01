@@ -1,6 +1,5 @@
 package database;
 
-
 import java.io.*;
 import java.util.*;
 
@@ -8,20 +7,20 @@ import model.Album;
 import model.Playlist;
 import model.Song;
 
-
-
-
-
-
-
 public class MusicStore {
+	
 	private ArrayList<Album> albums;
 	private ArrayList<Playlist> playlists;
 	private ArrayList<Song> allSongs;
+	
 	public MusicStore() {
 		albums = new ArrayList<Album>();
 		playlists = new ArrayList<Playlist>();
 		allSongs = new ArrayList<>();
+		
+		Playlist favorites = new Playlist("Favorites", new ArrayList<Song>());
+		playlists.add(favorites);
+		
 	}
 	
 	public ArrayList<Playlist> getPlaylists() {
@@ -40,6 +39,7 @@ public class MusicStore {
 		}
 		return null;
 	}
+	
 	public ArrayList<Song> getAllSongs() {
 	    return allSongs; 
 	}
@@ -57,11 +57,6 @@ public class MusicStore {
 		System.out.println("Song: " + name + " not found in database.");
 		return null;
 	}
-	
-	
-	
-	
-	
 	
 	public static MusicStore initializer(String path) throws IOException {
 
@@ -133,10 +128,6 @@ public class MusicStore {
 	    }
 	    
 	    return results;
-	}
-
-	
-	
-	
+	}	
 }
 
