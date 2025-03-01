@@ -131,5 +131,26 @@ public class MusicStore {
 	    
 	    return results;
 	}	
+	
+	public void addAlbum(Album a) {
+		if (albums.contains(a)) {return;}
+		albums.add(a);
+		for (Song s: a.getSongs()) {
+			if (!allSongs.contains(s)) {
+				allSongs.add(s);
+			}
+		}
+	}
+	
+	public void addPlaylist(Playlist p) {
+		if (playlists.contains(p)) {return;}
+		playlists.add(p);
+		for (Song s: p.getSongs()) {
+			if (!allSongs.contains(s)) {
+				allSongs.add(s);
+			}
+		}
+	}
+	
 }
 

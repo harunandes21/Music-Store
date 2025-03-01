@@ -40,6 +40,9 @@ public class Playlist {
 			}
 		}
 	}
+<<<<<<< Updated upstream
 	
 	
+=======
+>>>>>>> Stashed changes
 }

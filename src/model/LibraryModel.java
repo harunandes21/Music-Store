@@ -29,7 +29,7 @@ public class LibraryModel {
         
             Playlist newPlaylist = new Playlist(name, new ArrayList<>());
             userPlaylists.add(newPlaylist);
-            musicStore.getPlaylists().add(newPlaylist);
+            musicStore.addPlaylist(newPlaylist);
             
             System.out.println("Playlist '" + name + "' created.");
         
@@ -47,8 +47,11 @@ public class LibraryModel {
         System.out.println("Song '" + songName + "' added to playlist '" + playlistName + "'.");
     }
     
+<<<<<<< Updated upstream
     
     
+=======
+>>>>>>> Stashed changes
     public Playlist getPlaylistByName(String name) {
         return musicStore.getPlaylist(name);
     }
@@ -68,6 +71,7 @@ public class LibraryModel {
             }
         }
     }
+    
     public Song getSongByName(String songName) {
         for (Playlist playlist : userPlaylists) {
             for (Song song : playlist.getSongs()) {
