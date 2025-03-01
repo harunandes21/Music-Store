@@ -14,6 +14,7 @@ public class Playlist {
 	
 	private String name;
 	private ArrayList<Song> songs;
+	private boolean isAlbum = false;
 
 	/*
 	 * @pre name, songs != null
@@ -22,6 +23,12 @@ public class Playlist {
 		this.name = name;
 		this.songs = songs;
 	}
+	
+	public void setAlbum() {
+		isAlbum = true;
+	}
+	
+	public boolean getIsAlbum() {return isAlbum;}
 	
 	public String getName() {return name;}
 	
