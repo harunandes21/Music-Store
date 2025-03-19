@@ -9,16 +9,26 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import database.MusicStore;
 
 public class LibraryModel {
 
 	private MusicStore musicStore;
     private ArrayList<Playlist> userPlaylists;
+	private HashMap<Song, Integer> songPlays;
+	private HashMap<String, Integer> genreCount;
     
     public LibraryModel(MusicStore musicStore) {
         this.musicStore = musicStore;
         this.userPlaylists = new ArrayList<>();
+		songPlays = new HashMap<Song, Integer>();
+		genreCount = new HashMap<String, Integer>();
+    }
+    
+    public int getSongPlays(Song s) {
+    	return songPlays.get(s);
     }
     
     public ArrayList<Song> getAllSongs() {

@@ -14,11 +14,12 @@ public class Song {
 	private String title;
 	private String artist;
 	private Album album;
+	private String genre;
 
 	/*
-	 * @pre name, author != null
+	 * @pre name, author, genre != null
 	 */
-	public Song(String name, String author) {
+	public Song(String name, String author, String genre) {
 		title=name;
 		artist=author;
 		
@@ -33,6 +34,7 @@ public class Song {
 		this.rating = rating;
 	}
 	
+	public String getGenre() {return genre;}
 	
 	public String getName() {return title;}
 	
@@ -41,8 +43,4 @@ public class Song {
 	public String getArtist() {return artist;}
 	
 	public int getRating() {return rating;}
-	
-	
-	
-	
 }
