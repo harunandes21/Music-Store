@@ -40,7 +40,7 @@ public class MusicLibraryView {
 
 	public MusicLibraryView(MusicStore musicStore) {
 		this.musicStore = musicStore;
-		this.libraryModel = new LibraryModel(musicStore);
+		this.libraryModel = new LibraryModel(musicStore); //this might be where we enter the user specific logic and find their specific library
 		playlistListModel = new DefaultListModel<>();
 		songTableModel = new DefaultTableModel(new String[] { "Title", "Artist", "Album", "Rating" }, 0);
 	}
