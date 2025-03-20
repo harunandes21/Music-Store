@@ -25,17 +25,17 @@ public class Song {
 		album = a;
 	}
 	
-	public void setRating(int rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 	
-	public String getGenre() {return genre;}
+	public String getGenre() {return genre;} //immutable
 	
-	public String getName() {return title;}
+	public String getName() {return title;} //immutable
 	
-	public Album getAlbum() {return album;}
+	public Album getAlbum() {return album;} //this is fine because album is immutable and reference
 	
-	public String getArtist() {return artist;}
+	public String getArtist() {return artist;} //immutable
 	
-	public double getRating() {return rating;}
+	public double getRating() {double r = rating; return r;} //returns clone
 }

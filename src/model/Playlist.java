@@ -9,6 +9,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Playlist {
 	
@@ -28,13 +29,13 @@ public class Playlist {
 		isAlbum = true;
 	}
 	
-	public boolean isAlbum() {return isAlbum;}
+	public boolean isAlbum() {return isAlbum;} //immutable, no escape
 	
-	public String getName() {return name;}
+	public String getName() {return name;} //immutable, no escape
 	
 	public void setName(String name) {this.name = name;}
 	
-	public ArrayList<Song> getSongs() {return songs;}
+	public ArrayList<Song> getSongs() {return (ArrayList<Song>) songs.clone();} //no escaping reference
 	
 	public void addSong(Song song) {songs.add(song);}
 	
@@ -44,5 +45,23 @@ public class Playlist {
 				songs.remove(i);
 			}
 		}
+	}
+	
+	// SORTING METHODS
+	
+	public void shuffle() {
+		Collections.shuffle(songs);
+	}
+	
+	public void sortByName() {
+		songs.sort((a,b) -> a.getName().compareTo(b.getName()));
+	}
+	
+	public void sortByArtist() {
+		songs.sort((a,b) -> a.getArtist().compareTo(b.getArtist()));
+	}
+	
+	public void sortByRating() {
+		songs.sort((a,b) -> Double.compare(a.getRating(), b.getRating()));
 	}
 }

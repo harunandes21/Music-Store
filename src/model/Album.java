@@ -28,24 +28,24 @@ public class Album {
 	}
 	
 
-	public String getTitle() {
+	public String getTitle() { //immutable
 		return title;
-	}
+	} 
 
-	public String getArtist() {
+	public String getArtist() { //immutable
 		return artist;
 	}
 
-	public String getGenre() {
+	public String getGenre() { //immutable
 		return genre;
 	}
 
-	public String getYear() {
+	public String getYear() { //immutable
 		return year;
 	}
 
 	public ArrayList<Song> getSongs() {
-		return new ArrayList<Song>(songs);
+		return (ArrayList<Song>) songs.clone(); //clone = immutable
 	}
 	
 	public void addSong(Song song) {

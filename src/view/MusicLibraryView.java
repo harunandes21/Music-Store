@@ -25,6 +25,19 @@ import model.Album;
 import model.LibraryModel;
 import database.MusicStore;
 
+/*
+ * Notes:
+ * the format needs to change.
+ * printing needs to be done within this class rather than backend
+ * text-based gui
+ * operate on library model through its own methods rather than from outide.
+ * make album interactable within song view to display entire album
+ * make search results sortable
+ * shuffle button
+ * sorting for playlists
+ */
+
+
 public class MusicLibraryView {
 
 	private MusicStore musicStore;
@@ -40,7 +53,10 @@ public class MusicLibraryView {
 
 	public MusicLibraryView(MusicStore musicStore) {
 		this.musicStore = musicStore;
-		this.libraryModel = new LibraryModel(musicStore); //this might be where we enter the user specific logic and find their specific library
+		/* i think we need to delete this line altogether and from here on
+		 * begin to create sign in logic.
+		 */
+		this.libraryModel = new LibraryModel(); //this might be where we enter the user specific logic and find their specific library
 		playlistListModel = new DefaultListModel<>();
 		songTableModel = new DefaultTableModel(new String[] { "Title", "Artist", "Album", "Rating" }, 0);
 	}

@@ -15,15 +15,12 @@ import database.MusicStore;
 
 public class LibraryModel {
 
-	private MusicStore musicStore;
-    private ArrayList<Playlist> userPlaylists;
+    private HashMap<String, Playlist> userPlaylists = new HashMap<String, Playlist>();
 	private HashMap<Song, Integer> songPlays;
 	private HashMap<String, Integer> genreCount;
 	private ArrayList<Song> allSongs = new ArrayList<Song>();
     
-    public LibraryModel(MusicStore musicStore) {
-        this.musicStore = musicStore;
-        this.userPlaylists = new ArrayList<>();
+    public LibraryModel() {
 		songPlays = new HashMap<Song, Integer>();
 		genreCount = new HashMap<String, Integer>();
     }
@@ -54,18 +51,17 @@ public class LibraryModel {
     	//if album in library, add to album
     	//else add album to library with only the given song
     	//song should also be added individually i guess
-    	
+    	allSongs.add(s);
     }
     
     public ArrayList<Song> getAllSongs() {
-        return musicStore.getAllSongs();
+        return (ArrayList<Song>) allSongs.clone();
     }
     
     // adding a whole album to our library
     public void addPlaylist(Playlist playlist) {
         playlist.setAlbum();
-        userPlaylists.add(playlist);
-        musicStore.getPlaylists().add(playlist);  
+        userPlaylists.put(playlist.getName(), playlist);
         
         System.out.println("Playlist '" + playlist.getName() + "' added to library.");
     }
@@ -73,47 +69,34 @@ public class LibraryModel {
     public void createPlaylist(String name) {
         
             Playlist newPlaylist = new Playlist(name, new ArrayList<>());
-            userPlaylists.add(newPlaylist);
-            musicStore.addPlaylist(newPlaylist);
+			userPlaylists.put(newPlaylist.getName(), newPlaylist);
             
             System.out.println("Playlist '" + name + "' created.");
         
     }
     
-    public void addSongToPlaylist(String playlistName, String songName) {
-        Playlist playlist = musicStore.getPlaylist(playlistName);
-        
-        Song song = musicStore.searchSongByName(songName);
+    public void addSongToPlaylist(String playlistName, Song song) {
+        Playlist playlist = userPlaylists.get(playlistName);
         if (song == null) {
-            System.out.println("Song '" + songName + "' not found.");
+            System.out.println("Song not found.");
             return;
         }
         playlist.addSong(song);
-        System.out.println("Song '" + songName + "' added to playlist '" + playlistName + "'.");
+        System.out.println("Song '" + song.getName() + "' added to playlist '" + playlistName + "'.");
     }
 
     public Playlist getPlaylistByName(String name) {
-        return musicStore.getPlaylist(name);
+        return userPlaylists.get(name);
     }
     
-    public void removeSongFromPlaylist(String playlistName, String songName) {
+    //must receive actual song object which is expected to be within the playlist
+    public void removeSongFromPlaylist(String playlistName, Song s) {
         Playlist playlist = getPlaylistByName(playlistName);
-        if (playlist != null) {
-            Song songToRemove = null;
-            for (Song song : playlist.getSongs()) {
-                if (song.getName().equals(songName)) {
-                    songToRemove = song;
-                    break;
-                }
-            }
-            if (songToRemove != null) {
-                playlist.getSongs().remove(songToRemove);
-            }
-        }
+        playlist.removeSong(s); //logic is within playlist class
     }
     
     public Song getSongByName(String songName) {
-        for (Playlist playlist : userPlaylists) {
+        for (Playlist playlist : userPlaylists.values()) {
             for (Song song : playlist.getSongs()) {
                 if (song.getName().equals(songName)) {
                     return song;
@@ -128,7 +111,6 @@ public class LibraryModel {
         Playlist playlist = getPlaylistByName(playlistName);
         if (playlist != null) {
             userPlaylists.remove(playlist); 
-            musicStore.getPlaylists().remove(playlist); 
             System.out.println("Playlist '" + playlistName + "' deleted.");
         } else {
             System.out.println("Playlist '" + playlistName + "' not found.");
