@@ -1,5 +1,4 @@
-convert music store to global
-	will make it so all libraries access the same store
+largely, a lot of what happens in music store needs to move to library
 	
 write/read username password file
 	hash/salt
@@ -35,4 +34,17 @@ when adding a song to the library
 search by song by genre
 
 sort search results
+
+CHANGES FOR BETTER GRADE  (According to feedback) :
+- Convert storage to hash maps
+- Remove escaping references
+- Change UI to "text-based"
+- Add songs to library directly
+- Get list of song/artists
+- Searching for song by artist/album/title
+- Remove .setAlbum() for song
+- Printing should be done on view
+- Rating should be double (dumb mistake)
+- Video Organization (apparently)
+- UML Diagram needs var names (no tf it doesn't, it never has)
 	

@@ -97,16 +97,16 @@ public class MusicStore {
 
 		ArrayList<Song> songs = new ArrayList<>();
 		String songTitle;
+		
+		Album album = new Album(title, artist, genre, year);
+		
 		while ((songTitle = reader.readLine()) != null) {
-			songs.add(new Song(songTitle, artist));
-			
-			
+			songs.add(new Song(songTitle, artist, genre, album));
 		}
 		
-		Album album = new Album(title, artist, genre, year, songs);
-		
-		for (Song s : album.getSongs()) {
-			s.setAlbum(album);
+		//adds direct copy of song, which is not an escaping reference because Song is immutable
+		for (Song s : songs) {
+			album.addSong(s);
 		}
 		
 		return album;

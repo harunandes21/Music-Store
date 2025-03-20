@@ -9,25 +9,20 @@ package model;
 
 public class Song {
 	
-	private int rating;
-
+	private double rating;
 	private String title;
 	private String artist;
 	private Album album;
 	private String genre;
-
 	/*
 	 * @pre name, author, genre != null
 	 */
-	public Song(String name, String author, String genre) {
+	public Song(String name, String author, String genre, Album a) {
 		title=name;
 		artist=author;
-		
-		rating = 0;
-	}
-
-	public void setAlbum(Album album) {
-		this.album = album;
+		rating = 0.0;
+		this.genre = genre.toLowerCase(); //case insensitive
+		album = a;
 	}
 	
 	public void setRating(int rating) {
@@ -42,5 +37,5 @@ public class Song {
 	
 	public String getArtist() {return artist;}
 	
-	public int getRating() {return rating;}
+	public double getRating() {return rating;}
 }

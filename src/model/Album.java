@@ -14,18 +14,17 @@ public class Album {
 	private String year;
 	private String title;
 	private String genre;
-	private ArrayList<Song> songs;
+	private ArrayList<Song> songs = new ArrayList<Song>();
 	
 	/*
 	 * @pre title, artis, genre, year, songs != null
 	 */
 
-	public Album(String title, String artist, String genre, String year, ArrayList<Song> songs) {
+	public Album(String title, String artist, String genre, String year) {
 		this.title = title;
 		this.artist = artist;
 		this.genre = genre;
 		this.year = year;
-		this.songs = songs;
 	}
 	
 

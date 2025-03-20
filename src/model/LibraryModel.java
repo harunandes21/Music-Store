@@ -19,6 +19,7 @@ public class LibraryModel {
     private ArrayList<Playlist> userPlaylists;
 	private HashMap<Song, Integer> songPlays;
 	private HashMap<String, Integer> genreCount;
+	private ArrayList<Song> allSongs = new ArrayList<Song>();
     
     public LibraryModel(MusicStore musicStore) {
         this.musicStore = musicStore;
@@ -27,8 +28,33 @@ public class LibraryModel {
 		genreCount = new HashMap<String, Integer>();
     }
     
+    //retrieves the songPlays for a song S
     public int getSongPlays(Song s) {
     	return songPlays.get(s);
+    }
+    
+    // increases song plays or enters song into songPlays
+    public void playSong(Song s) {
+    	if (songPlays.containsKey(s)) {
+    		songPlays.put(s, songPlays.get(s)+1); 
+    	} else {songPlays.put(s,  1);}
+    }
+    
+    public void addGenre(String g) {
+    	if (genreCount.containsKey(g)) {
+    		genreCount.put(g, genreCount.get(g)+1);
+    	} else {genreCount.put(g, 1);}
+    }
+    
+    //method is to be ran any time a song is added to the library and it wasn't already there
+    //i.e. this method should not be ran if song is added to playlist when it is already in library
+    public void addSong(Song s) {
+    	String genre = s.getGenre();
+    	addGenre(genre);
+    	//if album in library, add to album
+    	//else add album to library with only the given song
+    	//song should also be added individually i guess
+    	
     }
     
     public ArrayList<Song> getAllSongs() {
