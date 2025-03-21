@@ -23,6 +23,13 @@ public class LibraryModel {
     public LibraryModel() {
 		songPlays = new HashMap<Song, Integer>();
 		genreCount = new HashMap<String, Integer>();
+		
+		//default playlists
+		createPlaylist("Favorites");
+		createPlaylist("Recently Played");
+		createPlaylist("Top Rated");
+		createPlaylist("Frequently Played");
+		
     }
     
     //retrieves the songPlays for a song S

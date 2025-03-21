@@ -11,40 +11,32 @@ import java.io.*;
 import java.util.*;
 
 import model.Album;
+import model.LibraryModel;
 import model.Playlist;
 import model.Song;
 
 public class MusicStore {
 	
 	private ArrayList<Album> albums;
-	private ArrayList<Playlist> playlists;
+	private HashMap<String, LibraryModel> libraries = new HashMap<String, LibraryModel>(); 
 	private ArrayList<Song> allSongs;
+	private LibraryModel currentLibrary;
 	
 	public MusicStore() {
 		albums = new ArrayList<Album>();
-		playlists = new ArrayList<Playlist>();
 		allSongs = new ArrayList<>();
-		
-		Playlist favorites = new Playlist("Favorites", new ArrayList<Song>());
-		playlists.add(favorites);
-		
 	}
 	
-	public ArrayList<Playlist> getPlaylists() {
-		return playlists;
+	public void updateLibrary(LibraryModel lib) {
+		currentLibrary = lib;
+	}
+	
+	public LibraryModel getLibrary(String user) {
+		return libraries.get(user);
 	}
 	
 	public ArrayList<Album> getAlbums() {
 		return albums;
-	}
-	
-	public Playlist getPlaylist(String name) {
-		for (Playlist p: playlists) {
-			if (p.getName().equalsIgnoreCase(name)) {
-				return p;
-			}
-		}
-		return null;
 	}
 	
 	public ArrayList<Song> getAllSongs() {
@@ -148,16 +140,5 @@ public class MusicStore {
 			}
 		}
 	}
-	
-	public void addPlaylist(Playlist p) {
-		if (playlists.contains(p)) {return;}
-		playlists.add(p);
-		for (Song s: p.getSongs()) {
-			if (!allSongs.contains(s)) {
-				allSongs.add(s);
-			}
-		}
-	}
-	
 }
 

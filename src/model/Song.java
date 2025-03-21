@@ -14,6 +14,7 @@ public class Song {
 	private String artist;
 	private Album album;
 	private String genre;
+	
 	/*
 	 * @pre name, author, genre != null
 	 */
