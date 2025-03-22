@@ -2,7 +2,8 @@ module CSCLA1{
     
     requires java.desktop;
 	requires junit;
-    opens view to javafx.fxml;
+	requires jbcrypt;
+    
     exports view;
-    exports test;
+   // exports test;
 }

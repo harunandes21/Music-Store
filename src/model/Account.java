@@ -1,27 +1,33 @@
 package model;
+import org.mindrot.jbcrypt.BCrypt;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Account {
 
 	private String username;
-	private String password;
+	private String hashedPassword;
 	private LibraryModel library;
+    
+
 	
 	public Account(String user, String pass, LibraryModel lib) {
 		username = user;
-		password = pass;
+		hashedPassword = BCrypt.hashpw(pass, BCrypt.gensalt());
 		library = lib;
 	}
 	
 	public boolean attemptLogin(String pass) {
-		if (password.equals(pass)) return true;
+		if (BCrypt.checkpw(pass,hashedPassword)) {;
+		return true;
+					}
 		return false;
 	}
-	
 	public String getUsername() {
 		return username;
+	}
+	
+	public String getHashedPassword() {// for testing if hash works. to be removed later.
+		return hashedPassword;
 	}
 	
 	public LibraryModel getLibrary() {
