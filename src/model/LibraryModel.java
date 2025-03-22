@@ -113,7 +113,9 @@ public class LibraryModel {
         return null;  
     }
 
-
+    public ArrayList<Playlist> getAllPlaylists() {
+        return new ArrayList<>(userPlaylists.values());
+    }
     public void deletePlaylist(String playlistName) {
         Playlist playlist = getPlaylistByName(playlistName);
         if (playlist != null) {

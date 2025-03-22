@@ -4,6 +4,9 @@ import java.util.Scanner;
 import database.MusicStore;
 import model.Account;
 import model.LibraryModel;
+import model.Playlist;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -150,7 +153,10 @@ public class View {
         
         switch (option) {
             case "1":
-                acc.getLibrary().getAllSongs().forEach(song -> System.out.println(song.getName()));
+            	ArrayList<Playlist> playlists=acc.getLibrary().getAllPlaylists();
+                for (Playlist playlist:playlists)
+                	 System.out.println(playlist.getName());
+            	
                 break;
             case "2":
                 System.out.print("Enter playlist name: ");
