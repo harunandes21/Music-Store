@@ -74,11 +74,17 @@ public class LibraryModel {
     }
     //creating a new playlist
     public void createPlaylist(String name) {
+    	ArrayList<String> defaultPlaylists = new ArrayList<>();
+        defaultPlaylists.add("Favorites");
+        defaultPlaylists.add("Recently Played");
+        defaultPlaylists.add("Top Rated");
+        defaultPlaylists.add("Frequently Played");
+        // avoided to print this at the beginning.
+        Playlist newPlaylist = new Playlist(name, new ArrayList<>());
+		userPlaylists.put(newPlaylist.getName(), newPlaylist);
+        if(!defaultPlaylists.contains(name)) 
+             System.out.println("Playlist '" + name + "' created.");
         
-            Playlist newPlaylist = new Playlist(name, new ArrayList<>());
-			userPlaylists.put(newPlaylist.getName(), newPlaylist);
-            
-            System.out.println("Playlist '" + name + "' created.");
         
     }
     

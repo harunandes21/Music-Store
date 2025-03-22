@@ -20,16 +20,13 @@ public class MusicStore {
 	private ArrayList<Album> albums;
 	private HashMap<String, LibraryModel> libraries = new HashMap<String, LibraryModel>(); 
 	private ArrayList<Song> allSongs;
-	private LibraryModel currentLibrary;
 	
 	public MusicStore() {
 		albums = new ArrayList<Album>();
 		allSongs = new ArrayList<>();
 	}
 	
-	public void updateLibrary(LibraryModel lib) {
-		currentLibrary = lib;
-	}
+	
 	
 	public LibraryModel getLibrary(String user) {
 		return libraries.get(user);
