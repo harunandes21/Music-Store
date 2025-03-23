@@ -44,7 +44,7 @@ public class MusicStore {
 		
 			for (Song s : allSongs) {
 				if (s.getName().equalsIgnoreCase(name)) {
-					System.out.println("Song found: Album - " + s.getAlbum().getTitle() + ", Title - "
+					System.out.println("Song found: Album - " + s.getAlbumTitle() + ", Title - "
 							+ s.getName() + ", Artist - " + s.getArtist());
 					return s;
 				}
@@ -104,29 +104,29 @@ public class MusicStore {
 	}
 	//used for music store
 	// can search 2 types, song or album. works for both title and author.
-	public ArrayList<Song> performSearch(String searchQuery, String searchType) {
-	    ArrayList<Song> results = new ArrayList<>();
-	    
-	    if (searchType.equals("Song")) {
-	      
-	        for (Song song : getAllSongs()) {
-	            if (song.getName().toLowerCase().contains(searchQuery.toLowerCase()) || 
-	                song.getArtist().toLowerCase().contains(searchQuery.toLowerCase())) {
-	                results.add(song);
-	            }
-	        }
-	    } else if (searchType.equals("Album")) {
-	        
-	        for (Song song : getAllSongs()) {
-	            if (song.getAlbum().getTitle().toLowerCase().contains(searchQuery.toLowerCase()) || 
-	                song.getAlbum().getArtist().toLowerCase().contains(searchQuery.toLowerCase())) {
-	                results.add(song);
-	            }
-	        }
-	    }
-	    
-	    return results;
-	}	
+//	public ArrayList<Song> performSearch(String searchQuery, String searchType) {
+//	    ArrayList<Song> results = new ArrayList<>();
+//	    
+//	    if (searchType.equals("Song")) {
+//	      
+//	        for (Song song : getAllSongs()) {
+//	            if (song.getName().toLowerCase().contains(searchQuery.toLowerCase()) || 
+//	                song.getArtist().toLowerCase().contains(searchQuery.toLowerCase())) {
+//	                results.add(song);
+//	            }
+//	        }
+//	    } else if (searchType.equals("Album")) {
+//	        
+//	        for (Song song : getAllSongs()) {
+//	            if (song.getAlbum().getTitle().toLowerCase().contains(searchQuery.toLowerCase()) || 
+//	                song.getAlbum().getArtist().toLowerCase().contains(searchQuery.toLowerCase())) {
+//	                results.add(song);
+//	            }
+//	        }
+//	    }
+//	    
+//	    return results;
+//	}	
 	
 	public void addAlbum(Album a) {
 		if (albums.contains(a)) {return;}

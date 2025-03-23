@@ -1,14 +1,19 @@
 package view;
 
-import java.util.Scanner;
+import database.AccountManager;
 import database.MusicStore;
 import model.Account;
 import model.LibraryModel;
 import model.Playlist;
 import model.Song;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.util.Scanner;
 
 public class View {
 
@@ -17,6 +22,8 @@ public class View {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+    	System.out.println("Current working directory: " + System.getProperty("user.dir"));
+
         try {
             store = MusicStore.initializer("albums/albums.txt"); 
             homeScreen();
@@ -56,7 +63,7 @@ public class View {
         System.out.println("\n=====================");
         System.out.print("Enter new username: ");
         String username = sc.nextLine();
-        if (accounts.containsKey(username)) { // validation
+        if (AccountManager.accountExists(username)) { // validation
             System.out.println("❌ Username already taken!");
             return;
         }
@@ -64,7 +71,7 @@ public class View {
         String password = sc.nextLine();
         Account newAcc = new Account(username, password, new LibraryModel());
         System.out.println("🔐 Account created successfully!");
-        accounts.put(username, newAcc);
+        AccountManager.saveAccount(newAcc);
         // Add new options after account creation
         System.out.println("\n1. Go to Log In");
         System.out.println("2. Go back to Main Menu");
@@ -81,7 +88,7 @@ public class View {
         System.out.println("\n=====================");
         System.out.print("Enter username: ");
         String username = sc.nextLine();
-        Account acc = accounts.get(username);
+        Account acc = AccountManager.loadAccount(username);
         if (acc == null) {
             System.out.println("❌ No account found for that username.");
             return;
@@ -189,7 +196,7 @@ public class View {
         String songName = sc.nextLine();
         Song song = store.searchSongByName(songName); // Assuming this method exists in MusicStore
         if (song != null) {
-            acc.getLibrary().addSong(song);
+            acc.getLibrary().addSongToLibrary(song,acc);
             System.out.println("Added '" + song.getName() + "' to your library.");
         } else {
             System.out.println("❌ Song not found.");

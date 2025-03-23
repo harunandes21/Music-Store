@@ -12,7 +12,7 @@ public class Song {
 	private double rating;
 	private String title;
 	private String artist;
-	private Album album;
+	private String albumTitle;
 	private String genre;
 	
 	/*
@@ -23,9 +23,18 @@ public class Song {
 		artist=author;
 		rating = 0.0;
 		this.genre = genre.toLowerCase(); //case insensitive
-		album = a;
+		this.albumTitle = a.getTitle();
 	}
-	
+	public Song() {
+        this.rating = 0.0;
+        this.title = "";
+        this.artist = "";
+        this.genre = "";
+        this.albumTitle = ""; 
+    }
+	public String getAlbumTitle() {
+        return albumTitle;
+    }
 	public void setRating(double rating) {
 		this.rating = rating;
 	}
@@ -34,7 +43,6 @@ public class Song {
 	
 	public String getName() {return title;} //immutable
 	
-	public Album getAlbum() {return album;} //this is fine because album is immutable and reference
 	
 	public String getArtist() {return artist;} //immutable
 	

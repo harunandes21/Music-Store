@@ -26,6 +26,13 @@ public class Album {
 		this.genre = genre;
 		this.year = year;
 	}
+	public Album() {
+        this.title = "";
+        this.artist = "";
+        this.genre = "";
+        this.year = "";
+        this.songs = new ArrayList<>();  // Initialize songs list
+    }
 	
 
 	public String getTitle() { //immutable

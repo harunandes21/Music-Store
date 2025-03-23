@@ -8,7 +8,8 @@ public class Account {
 	private String hashedPassword;
 	private LibraryModel library;
     
-
+	public Account() {
+    }
 	
 	public Account(String user, String pass, LibraryModel lib) {
 		username = user;

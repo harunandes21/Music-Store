@@ -24,6 +24,9 @@ public class Playlist {
 		this.name = name;
 		this.songs = songs;
 	}
+	public Playlist() {
+        this.songs = new ArrayList<>();
+    }
 	
 	public void setAlbum() {
 		isAlbum = true;
