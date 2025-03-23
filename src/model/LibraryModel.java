@@ -12,16 +12,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import database.AccountManager;
-import database.MusicStore;
 
 public class LibraryModel {
 
     private HashMap<String, Playlist> userPlaylists = new HashMap<String, Playlist>();
 	private HashMap<Song, Integer> songPlays;
 	private HashMap<String, Integer> genreCount;
+	private ArrayList<Song> songList;
 	private ArrayList<Song> allSongs;
 	private ArrayList<Song> recentlyPlayed;
-	 private ArrayList<Song> frequentlyPlayed;
+	private ArrayList<Song> frequentlyPlayed;
+	 
     public LibraryModel() {
 		songPlays = new HashMap<Song, Integer>();
 		genreCount = new HashMap<String, Integer>();
@@ -32,10 +33,48 @@ public class LibraryModel {
 		
     }
     
-    
     //retrieves the songPlays for a song S
     public int getSongPlays(Song s) {
     	return songPlays.get(s);
+    }
+    
+    //this is a boolean so when it is called within view, you can print message if song is already in allSongs
+    public boolean addSongToLibrary(Song s) {
+    	if (!allSongs.contains(s)) {allSongs.add(s);}
+    	if (!songList.contains(s)) {
+    		songList.add(s);
+    		return true;
+    	}
+    	return false;
+    }
+    
+    //boolean for message handling in view
+    public boolean removeSongFromLib(Song s) {
+    	if (songList.contains(s)) {
+    		for(int i = 0; i < songList.size(); i++) {
+    			if (songList.get(i).equals(s)) {
+    				songList.remove(i);
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
+    public ArrayList<Song> getSongList() {
+    	return new ArrayList<Song>(songList);
+    }
+    
+    public void rateSong(Song s, Double rate) {
+    	if (rate > 5) rate = 5.0; //sets max possible rating
+    	s.setRating(rate);
+    	//both will execute if rating = 5
+    	if (rate >= 4) {
+    		userPlaylists.get("Top Rated").addSong(s);
+    	}
+    	if (rate == 5) {
+    		userPlaylists.get("Favorites").addSong(s);
+    	}
     }
     
     private void createDefaultPlaylists() {	
@@ -46,6 +85,7 @@ public class LibraryModel {
     }
     
     // increases song plays or enters song into songPlays
+    // also updates frequently played
     public void playSong(Song s) {
     	if (songPlays.containsKey(s)) {
     		songPlays.put(s, songPlays.get(s)+1); 
@@ -53,7 +93,17 @@ public class LibraryModel {
     	if (recentlyPlayed.size() == 10) {
             recentlyPlayed.remove(recentlyPlayed.size() - 1); // remove the least recently played song
             recentlyPlayed.add(0, s);
-        }
+        } else {recentlyPlayed.add(0, s);} //adds song if recently played isnt 10 yet
+    	if (frequentlyPlayed.size() < 10) {
+    		frequentlyPlayed.add(frequentlyPlayed.size()-1,s); //add song at end
+    		frequentlyPlayed.sort((a, b) -> songPlays.get(a).compareTo(songPlays.get(b))); 
+    	} else {
+    		if (songPlays.get(s) > songPlays.get(frequentlyPlayed.get(9))) {
+    			frequentlyPlayed.remove(9);
+    			frequentlyPlayed.add(9, s);
+    			frequentlyPlayed.sort((a, b) -> songPlays.get(a).compareTo(songPlays.get(b))); //sort frequently played every time it is updated
+    		}
+    	}
     }
     
     public void addGenre(String g) {
@@ -61,6 +111,7 @@ public class LibraryModel {
     		genreCount.put(g, genreCount.get(g)+1);
     	} else {genreCount.put(g, 1);}
     }
+    
     private void createPlaylistForGenre(String genre) {
         Playlist genrePlaylist = new Playlist(genre, new ArrayList<>());
         userPlaylists.put(genre, genrePlaylist);
@@ -88,7 +139,7 @@ public class LibraryModel {
     // Use this method when adding to library, use addSongToPlaylist when adding to playlist. This will increase the genre count.
     
     public ArrayList<Song> getAllSongs() {
-        return (ArrayList<Song>) allSongs.clone();
+        return new ArrayList<Song>(allSongs);
     }
     public ArrayList<Song> getRecentlyPlayed() {
         return new ArrayList<>(recentlyPlayed);
@@ -168,7 +219,7 @@ public class LibraryModel {
     public void deletePlaylist(String playlistName) {
         Playlist playlist = getPlaylistByName(playlistName);
         if (playlist != null) {
-            userPlaylists.remove(playlist); 
+            userPlaylists.remove(playlistName); //the hash map keeps keys as names (Strings)
             System.out.println("Playlist '" + playlistName + "' deleted.");
         } else {
             System.out.println("Playlist '" + playlistName + "' not found.");

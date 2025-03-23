@@ -1,0 +1,11 @@
+{
+  "username": "Lucas",
+  "hashedPassword": "$2a$10$WDaijbhUUYqgAVeR79Ao.uXlWw4pr6fEXQZJUDUVAAzzLEx9HIIM6",
+  "library": {
+    "userPlaylists": {},
+    "songPlays": {},
+    "genreCount": {},
+    "allSongs": [],
+    "recentlyPlayed": []
+  }
+}
