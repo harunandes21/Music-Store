@@ -48,17 +48,27 @@ public class LibraryModel {
     	}
     	return false;
     }
+    public Song getSongById(int songId) {
+        for (Song song : allSongs) {
+            if (song.getSongId() == songId) {
+                return song; 
+            }
+        }
+        return null; 
+    }
+
     
-    //boolean for message handling in view
-    public boolean removeSongFromLib(Song s) {
-    	if (songList.contains(s)) {
-    		for(int i = 0; i < songList.size(); i++) {
-    			if (songList.get(i).equals(s)) {
-    				songList.remove(i);
-    				return true;
-    			}
-    		}
+    
+    public boolean removeSongFromLib(int id, Account acc) {
+    	
+    	Song songToBeRemoved=getSongById(id);
+    	if (songToBeRemoved!=null) {
+    		allSongs.remove(songToBeRemoved);
+    		AccountManager.updateAccount(acc);
+    		return true;
+    		
     	}
+    	
     	return false;
     }
     

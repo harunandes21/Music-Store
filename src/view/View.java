@@ -223,7 +223,7 @@ public class View {
 
             switch (choice) {
                 case "1":
-                    if (! viewLibrarySongs(acc,"Songs are orted by the order of being added to library"))
+                    if (! viewLibrarySongs(acc,"Songs are sorted by the order of being added to library"))
                     break;
                     
                     boolean songsMenu = true;
@@ -254,6 +254,12 @@ public class View {
                                 break;
                             case "4":
                             	shuffle(acc);
+                                break;
+                            case "5":
+                            	System.out.println("Enter Song ID to remove");
+                            	 String songid = sc.nextLine();
+                            	 deleteSongFromLib(acc,Integer.parseInt(songid));
+                            	
                                 break;
                             case "7":
                                 songsMenu = false; 
@@ -309,10 +315,23 @@ public class View {
             return false;
         } else {
         	System.out.println(" 📚 Your Library Songs( "+viewType+") ");
-        	for (Song song : songs) 
-        	    System.out.println(song);
+        	for(Song song:songs)
+        		System.out.println(song);
         }
         return true;
+    }
+    private static void deleteSongFromLib(Account acc,int id) {
+    		String songName=acc.getLibrary().getSongById(id).getName();
+    	if(acc.getLibrary().removeSongFromLib(id, acc)) {
+    		System.out.println(""+songName +" Has been Removed");
+    		 viewLibrarySongs(acc,"Songs are sorted by the order of being added to library");
+    	}
+    	else 
+    		{System.out.println("Song not found");
+    	 viewLibrarySongs(acc,"Songs are sorted by the order of being added to library");
+    		}
+    		
+    	
     }
 
     private static void managePlaylists(Account acc) {
@@ -414,33 +433,46 @@ public class View {
 
         
         System.out.println("\nSongs found for genre: " + genre);
-        for (int i = 0; i < genreSongs.size(); i++) {
-            Song song = genreSongs.get(i);
-            System.out.println((i + 1) + ". " + song.getName() + " by " + song.getArtist());
-        }
+        for(Song song:genreSongs)
+        	System.out.println(song);
+//        for (int i = 0; i < genreSongs.size(); i++) {
+//            Song song = genreSongs.get(i);
+//            System.out.println((i + 1) + ". " + song.getName() + " by " + song.getArtist());
+//        }
 
-        System.out.print("\nEnter the numbers of the songs you want to add (comma separated): ");
+        System.out.print("\nEnter the ID's of the songs you want to add (comma separated): ");
         String input = sc.nextLine();
         String[] songNumbers = input.split(",");
 
        
         for (String number : songNumbers) {
             try {
-                int songIndex = Integer.parseInt(number.trim()) - 1; // Convert to zero-index
-                if (songIndex >= 0 && songIndex < genreSongs.size()) {
-                    Song song = genreSongs.get(songIndex);
-                    if (acc.getLibrary().addSongToLibrary(song, acc)) {
-                        System.out.println("Added '" + song.getName() + "' to your library.");
-                    } else {
-                        System.out.println("❌ Song '" + song.getName() + "' is already in your library.");
+                int songId = Integer.parseInt(number.trim()); 
+                boolean songFound = false;
+
+                
+                for (Song song : genreSongs) {
+                    if (song.getSongId() == songId) {
+                        songFound = true;
+
+                        
+                        if (acc.getLibrary().addSongToLibrary(song, acc)) {
+                            System.out.println("Added '" + song.getName() + "' to your library.");
+                        } else {
+                            System.out.println("❌ Song '" + song.getName() + "' is already in your library.");
+                        }
+                        break;
                     }
-                } else {
-                    System.out.println("❌ Invalid song number: " + (songIndex + 1));
+                }
+
+                if (!songFound) {
+                    System.out.println("❌ Song with ID " + songId + " not found.");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Invalid input. Please enter valid song numbers.");
+                System.out.println("❌ Invalid input. Please enter valid song IDs.");
             }
         }
+
     }
 
 }

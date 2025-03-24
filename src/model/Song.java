@@ -16,23 +16,26 @@ public class Song {
 	private String artist;
 	private String albumTitle;
 	private String genre;
+	private int songId;
 	
 	/*
 	 * @pre name, author, genre != null
 	 */
-	public Song(String name, String author, String genre, Album a) {
+	public Song(String name, String author, String genre, Album a, int id) {
 		title=name;
 		artist=author;
 		rating = 0.0;
 		this.genre = genre.toLowerCase(); //case insensitive
 		this.albumTitle = a.getTitle();
+		songId=id;
 	}
 	public Song() {
         this.rating = 0.0;
         this.title = "";
         this.artist = "";
         this.genre = "";
-        this.albumTitle = ""; 
+        this.albumTitle = "";
+        this.songId=0;
     }
 	public String getAlbumTitle() {
         return albumTitle;
@@ -51,7 +54,7 @@ public class Song {
 	public double getRating() {double r = rating; return r;} //returns clone
 	@Override
 	public String toString() {
-	    return "🎵 " + title + " by " + artist +", Album: "+albumTitle+"," + genre +", Rating:"+rating+"";
+	    return " "+songId+" " + title + " by " + artist +", Album: "+albumTitle+"," + genre +", Rating:"+rating+"";
 	}
 	@Override
     public int hashCode() {
@@ -66,5 +69,9 @@ public class Song {
                Objects.equals(artist, song.artist) &&
                Objects.equals(albumTitle, song.albumTitle);
     }
+	public int getSongId() {
+		
+		return songId;
+	}
 
 }

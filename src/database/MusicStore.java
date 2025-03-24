@@ -20,7 +20,7 @@ public class MusicStore {
 	private ArrayList<Album> albums;
 	private HashMap<String, LibraryModel> libraries = new HashMap<String, LibraryModel>(); 
 	private ArrayList<Song> allSongs;
-	
+	private static int id=1;
 	public MusicStore() {
 		albums = new ArrayList<Album>();
 		allSongs = new ArrayList<>();
@@ -90,7 +90,9 @@ public class MusicStore {
 		Album album = new Album(title, artist, genre, year);
 		
 		while ((songTitle = reader.readLine()) != null) {
-			songs.add(new Song(songTitle, artist, genre, album));
+			
+			songs.add(new Song(songTitle, artist, genre, album,id));
+			id++;
 		}
 		
 		//adds direct copy of song, which is not an escaping reference because Song is immutable
