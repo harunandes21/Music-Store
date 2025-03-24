@@ -196,8 +196,9 @@ public class View {
         String songName = sc.nextLine();
         Song song = store.searchSongByName(songName); // Assuming this method exists in MusicStore
         if (song != null) {
-            acc.getLibrary().addSongToLibrary(song,acc);
+          if(  acc.getLibrary().addSongToLibrary(song,acc))
             System.out.println("Added '" + song.getName() + "' to your library.");
+          else System.out.println("❌ Song is already in your library");
         } else {
             System.out.println("❌ Song not found.");
         }
@@ -210,35 +211,88 @@ public class View {
             System.out.println("=====================");
             System.out.println("1. View Library Songs");
             System.out.println("2. Manage Playlists");
-            System.out.println("3. Go Back");
+            System.out.println("3. Search a song");
+            System.out.println("4. Go Back");
             System.out.print("Select an option: ");
             String choice = sc.nextLine();
 
             switch (choice) {
                 case "1":
-                    viewLibrarySongs(acc);
+                    if (! viewLibrarySongs(acc,"Songs are orted by the order of being added to library"))
+                    break;
+                    
+                    boolean sortingMenu = true;
+                    while (sortingMenu) {
+                        System.out.println("\nWould you like to sort your library?");
+                        System.out.println("1. Sort by Song Title");
+                        System.out.println("2. Sort by Artist");
+                        System.out.println("3. Sort by Rating");
+                        System.out.println("4. Go Back");
+
+                        System.out.print("Select an option: ");
+                        String option = sc.nextLine();
+
+                        switch (option) {
+                            case "1":
+                                sortSongsByTitle(acc);
+                                break;
+                            case "2":
+                                sortSongsByArtist(acc);
+                                break;
+                            case "3":
+                                sortSongsByRating(acc);
+                                break;
+                            case "4":
+                                sortingMenu = false; 
+                                break;
+                            default:
+                                System.out.println("❌ Invalid option. Try again.");
+                        }
+                    }
                     break;
                 case "2":
                     managePlaylists(acc);
                     break;
                 case "3":
+                    searchInLibrary(acc);
+                    break;
+                case "4":
                     return;
                 default:
                     System.out.println("❌ Invalid choice. Try again.");
             }
         }
     }
+    private static void sortSongsByRating(Account acc) {
+        acc.getLibrary().sortByRating();
+        
+        viewLibrarySongs(acc,"Sorted by Rating");
+    }
+    private static void sortSongsByArtist(Account acc) {
+        acc.getLibrary().sortByArtist();
+        
+        viewLibrarySongs(acc,"Sorted by Artist Name");
+    }
+    private static void sortSongsByTitle(Account acc) {
+        acc.getLibrary().sortByName(); // Calls sortByName() on user's library
+       
+        viewLibrarySongs(acc,"Sorted by Song Title"); // Show updated sorted list
+    }
 
-    private static void viewLibrarySongs(Account acc) {
+    private static boolean viewLibrarySongs(Account acc, String viewType) {
         System.out.println("\n=====================");
-        System.out.println(" 📚 Your Library Songs 📚 ");
+        
         System.out.println("=====================");
-        var songs = acc.getLibrary().getAllSongs();
+        ArrayList<Song> songs = new ArrayList<>(acc.getLibrary().getAllSongs());
         if (songs.isEmpty()) {
             System.out.println("🎧 Your library is empty.");
+            return false;
         } else {
-            songs.forEach(song -> System.out.println("🎵 " + song.getName() + " by " + song.getArtist()));
+        	System.out.println(" 📚 Your Library Songs( "+viewType+") ");
+        	for (Song song : songs) 
+        	    System.out.println(song);
         }
+        return true;
     }
 
     private static void managePlaylists(Account acc) {
@@ -297,5 +351,37 @@ public class View {
             default:
                 System.out.println("❌ Invalid input.");
         }
+    }
+    public static void searchInLibrary(Account acc)
+    {
+    	System.out.println("1. Search a Song by Name.");
+    	System.out.println("2. Search a Song by Genre.");
+    	System.out.print("Enter your Choice: ");
+        String choice = sc.nextLine();
+        switch (choice) {
+        case "1":
+        	System.out.print("Enter the Song Name: ");
+        	String songName = sc.nextLine();
+        	acc.getLibrary().getSongByName(songName);
+        	
+            break;
+        case "2":
+        	System.out.print("Please type in one genre to search: ");
+        	System.out.print("Pop---Rock---Alternative---Latin---Traditional Country---6.Singer/SongWriter  ");
+        	String genre = sc.nextLine();
+        	ArrayList<Song> results= new ArrayList<>(acc.getLibrary().searchSongByGenre(genre));
+        	for(Song song: results)
+        	System.out.println(song);
+        	
+            break;
+        case "4":
+            return;
+        default:
+            System.out.println("❌ Invalid choice. Try again.");
+    }
+        
+    	
+
+    	
     }
 }

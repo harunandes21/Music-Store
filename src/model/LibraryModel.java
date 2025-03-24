@@ -9,6 +9,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import database.AccountManager;
@@ -77,7 +78,7 @@ public class LibraryModel {
     	}
     }
     
-    private void createDefaultPlaylists() {	
+    public void createDefaultPlaylists() {	
     	createPlaylist("Favorites");
 		createPlaylist("Recently Played");
 		createPlaylist("Top Rated");
@@ -120,7 +121,8 @@ public class LibraryModel {
     
     //method is to be ran any time a song is added to the library and it wasn't already there
     //i.e. this method should not be ran if song is added to playlist when it is already in library
-    public void addSongToLibrary(Song s, Account acc) {
+    public boolean addSongToLibrary(Song s, Account acc) {
+    	if(!allSongs.contains(s)) {
     	// check if song is already in library
     	String genre = s.getGenre();
     	addGenre(genre);
@@ -132,9 +134,11 @@ public class LibraryModel {
             createPlaylistForGenre(genre);}
     	AccountManager.updateAccount(acc);
     	
-    	
-    	
-    	return;
+    	return true;
+    	}
+    	else 
+    		
+    	return false ;
     }
     // Use this method when adding to library, use addSongToPlaylist when adding to playlist. This will increase the genre count.
     
@@ -203,15 +207,28 @@ public class LibraryModel {
     }
     
     public Song getSongByName(String songName) {
-        for (Playlist playlist : userPlaylists.values()) {
-            for (Song song : playlist.getSongs()) {
-                if (song.getName().equals(songName)) {
+            for (Song song : allSongs) {
+                if (song.getName().equalsIgnoreCase(songName)) {
                     return song;
                 }
             }
-        }
+        
         return null;  
     }
+    
+    public ArrayList<Song> searchSongByGenre(String genre)
+    {
+    	ArrayList<Song> results= new ArrayList<>();
+    	
+    	for(Song song: allSongs) {
+    		if(genre.equalsIgnoreCase(song.getGenre()))
+    			results.add(song);
+    			
+    	}
+    	
+    	return results;
+    }
+    
 
     public ArrayList<Playlist> getAllPlaylists() {
         return new ArrayList<>(userPlaylists.values());
@@ -225,5 +242,37 @@ public class LibraryModel {
             System.out.println("Playlist '" + playlistName + "' not found.");
         }
     }
+    
+    public void shuffle() {
+		Collections.shuffle(allSongs);
+	}
+	
+ // sort for a playlist
+    public void sortByName(ArrayList<Song> songs) {
+        songs.sort((a, b) -> a.getName().compareTo(b.getName()));
+    }
+
+    public void sortByName() {
+        allSongs.sort((a, b) -> a.getName().compareTo(b.getName()));
+    }
+
+    // sort for a playlist
+    public void sortByArtist(ArrayList<Song> songs) {
+        songs.sort((a, b) -> a.getArtist().compareTo(b.getArtist()));
+    }
+
+    public void sortByArtist() {
+        allSongs.sort((a, b) -> a.getArtist().compareTo(b.getArtist()));
+    }
+
+    // sort for a playlist
+    public void sortByRating(ArrayList<Song> songs) {
+        songs.sort((a, b) -> Double.compare(a.getRating(), b.getRating()));
+    }
+
+    public void sortByRating() {
+        allSongs.sort((a, b) -> Double.compare(a.getRating(), b.getRating()));
+    }
+
     
 }

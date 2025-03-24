@@ -52,19 +52,5 @@ public class Playlist {
 	
 	// SORTING METHODS
 	
-	public void shuffle() {
-		Collections.shuffle(songs);
-	}
 	
-	public void sortByName() {
-		songs.sort((a,b) -> a.getName().compareTo(b.getName()));
-	}
-	
-	public void sortByArtist() {
-		songs.sort((a,b) -> a.getArtist().compareTo(b.getArtist()));
-	}
-	
-	public void sortByRating() {
-		songs.sort((a,b) -> Double.compare(a.getRating(), b.getRating()));
-	}
 }

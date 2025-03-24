@@ -11,12 +11,12 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/lucas/Downloads/gson-2.8.9.jar">
+	<classpathentry kind="lib" path="gson-2.8.9.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/lucas/Downloads/jbcrypt-0.4.jar">
+	<classpathentry kind="lib" path="jbcrypt-0.4.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

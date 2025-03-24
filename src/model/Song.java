@@ -7,6 +7,8 @@
 
 package model;
 
+import java.util.Objects;
+
 public class Song {
 	
 	private double rating;
@@ -47,4 +49,22 @@ public class Song {
 	public String getArtist() {return artist;} //immutable
 	
 	public double getRating() {double r = rating; return r;} //returns clone
+	@Override
+	public String toString() {
+	    return "🎵 " + title + " by " + artist +", Album: "+albumTitle+"," + genre +", Rating:"+rating+"";
+	}
+	@Override
+    public int hashCode() {
+        return Objects.hash(title, artist, albumTitle);
+    }
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Song song = (Song) o;
+        return Objects.equals(title, song.title) &&
+               Objects.equals(artist, song.artist) &&
+               Objects.equals(albumTitle, song.albumTitle);
+    }
+
 }

@@ -14,6 +14,9 @@ public class AccountManager {
 
     
     public static void saveAccount(Account account) {
+    	if (account.getLibrary().getAllPlaylists().isEmpty()) {
+            account.getLibrary().createDefaultPlaylists();
+        }
     	File dir = new File(ACCOUNT_DIRECTORY);
     	if (!dir.exists()) {
     	    if (dir.mkdirs()) {
