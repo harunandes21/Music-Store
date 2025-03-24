@@ -221,13 +221,17 @@ public class View {
                     if (! viewLibrarySongs(acc,"Songs are orted by the order of being added to library"))
                     break;
                     
-                    boolean sortingMenu = true;
-                    while (sortingMenu) {
+                    boolean songsMenu = true;
+                    while (songsMenu) {
                         System.out.println("\nWould you like to sort your library?");
                         System.out.println("1. Sort by Song Title");
                         System.out.println("2. Sort by Artist");
                         System.out.println("3. Sort by Rating");
-                        System.out.println("4. Go Back");
+                        System.out.println("4. Shuffle Songs");
+                        System.out.println("5. Remove a song from your library");
+                        System.out.println("6. Rate a song");
+                        
+                        System.out.println("7. Go Back");
 
                         System.out.print("Select an option: ");
                         String option = sc.nextLine();
@@ -240,10 +244,14 @@ public class View {
                                 sortSongsByArtist(acc);
                                 break;
                             case "3":
-                                sortSongsByRating(acc);
+                            	 sortSongsByRating(acc);
+                                
                                 break;
                             case "4":
-                                sortingMenu = false; 
+                            	shuffle(acc);
+                                break;
+                            case "7":
+                                songsMenu = false; 
                                 break;
                             default:
                                 System.out.println("❌ Invalid option. Try again.");
@@ -262,6 +270,13 @@ public class View {
                     System.out.println("❌ Invalid choice. Try again.");
             }
         }
+    }
+    private static void shuffle(Account acc)
+    {
+    	acc.getLibrary().shuffle();
+    	
+    	viewLibrarySongs(acc,"Songs are being shown in a random order");
+    	
     }
     private static void sortSongsByRating(Account acc) {
         acc.getLibrary().sortByRating();
