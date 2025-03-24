@@ -123,7 +123,9 @@ public class View {
                     break;
                 case "3":
                     System.out.println("👋 Logging out...");
+                    AccountManager.updateAccount(acc);
                     return;
+                    
                 default:
                     System.out.println("❌ Invalid choice. Try again.");
             }
