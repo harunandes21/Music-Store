@@ -113,10 +113,11 @@ public class LibraryModel {
     	} else {genreCount.put(g, 1);}
     }
     
-    private void createPlaylistForGenre(String genre) {
+    private void createPlaylistForGenre(String genre,Account acc) {
         Playlist genrePlaylist = new Playlist(genre, new ArrayList<>());
         userPlaylists.put(genre, genrePlaylist);
         System.out.println("Playlist for genre '" + genre + "' created.");
+        AccountManager.updateAccount(acc);
     }
     
     //method is to be ran any time a song is added to the library and it wasn't already there
@@ -131,14 +132,28 @@ public class LibraryModel {
     	//song should also be added individually i guess
     	allSongs.add(s);
     	if (genreCount.get(genre) >= 10 && !userPlaylists.containsKey(genre)) {
-            createPlaylistForGenre(genre);}
+            createPlaylistForGenre(genre,acc);
+            
+            }
     	AccountManager.updateAccount(acc);
+    	ArrayList<Song> genreSongs = searchSongByGenre(genre); 
+        Playlist genrePlaylist = userPlaylists.get(genre); 
+        
+        if(genrePlaylist!=null) {
+        for (Song song : genreSongs) {
+             if (!genrePlaylist.contains(song)) 
+               addSongToPlaylist(genre,song,acc) ;
+            
+        }
     	
     	return true;
+    		}
+        return true;
     	}
     	else 
     		
-    	return false ;
+    	
+		return false;
     }
     // Use this method when adding to library, use addSongToPlaylist when adding to playlist. This will increase the genre count.
     
@@ -172,7 +187,7 @@ public class LibraryModel {
         
     }
     // song has to be in library to add id to any playlist!! 
-    public void addSongToPlaylist(String playlistName, Song song) {
+    public void addSongToPlaylist(String playlistName, Song song,Account acc) {
         Playlist playlist = userPlaylists.get(playlistName);
         if (playlist == null) {
             System.out.println("Playlist '" + playlistName + "' not found.");
@@ -185,6 +200,8 @@ public class LibraryModel {
         else 
         playlist.addSong(song);
         System.out.println("Song '" + song.getName() + "' added to playlist '" + playlistName + "'.");
+        AccountManager.updateAccount(acc);
+        
     }
 
     public Playlist getPlaylistByName(String name) {
@@ -228,6 +245,8 @@ public class LibraryModel {
     	
     	return results;
     }
+    
+
     
 
     public ArrayList<Playlist> getAllPlaylists() {

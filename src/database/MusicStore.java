@@ -128,6 +128,20 @@ public class MusicStore {
 //	    return results;
 //	}	
 	
+	// In MusicStore class
+	public ArrayList<Song> searchSongByGenreInStore(String genre) {
+	    ArrayList<Song> results = new ArrayList<>();
+	    
+	    for (Song song : allSongs) {
+	        if (song.getGenre().equalsIgnoreCase(genre)) {
+	            results.add(song);
+	        }
+	    }
+	    
+	    return results;
+	}
+
+	
 	public void addAlbum(Album a) {
 		if (albums.contains(a)) {return;}
 		albums.add(a);

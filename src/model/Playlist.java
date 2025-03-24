@@ -49,6 +49,15 @@ public class Playlist {
 			}
 		}
 	}
+	public boolean contains(Song song) {
+        
+        for (Song s : songs) {
+            if (s.getName().equalsIgnoreCase(song.getName()) && s.getArtist().equalsIgnoreCase(song.getArtist())) {
+                return true; // Song is already in the playlist
+            }
+        }
+        return false; 
+    }
 	
 	// SORTING METHODS
 	

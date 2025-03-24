@@ -141,7 +141,8 @@ public class View {
         System.out.println("5. Search Song by Author");
         System.out.println("6. Search Album by Title");
         System.out.println("7. Search Album by Singer");
-        System.out.println("8. Go Back to The Main Menu");
+        System.out.println("8. Search Song by Genre");
+        System.out.println("9. Go Back to The Main Menu");
         
         System.out.print("Select an option: ");
         String choice = sc.nextLine();
@@ -154,27 +155,31 @@ public class View {
                 addSongToLibrary(acc);
                 break;
             case "3":
-                // Placeholder for search logic
+               
                 System.out.println("Searching for Song by Name...");
                 break;
             case "4":
-                // Placeholder for search logic
+               
                 System.out.println("Searching for Song by Singer...");
                 break;
             case "5":
-                // Placeholder for search logic
+                
                 System.out.println("Searching for Song by Author...");
                 break;
             case "6":
-                // Placeholder for search logic
+               
                 System.out.println("Searching for Album by Title...");
                 break;
             case "7":
-                // Placeholder for search logic
+                
                 System.out.println("Searching for Album by Singer...");
                 break;
             case "8":
-                // Placeholder for search logic
+                
+            	searchAndAddSongsByGenre(acc);
+                break;
+            case "9":
+                
             	userMenu(acc);
                 break;
             default:
@@ -345,7 +350,7 @@ public class View {
                 String songName = sc.nextLine();
                 var song = acc.getLibrary().getSongByName(songName);
                 if (song == null) song = store.searchSongByName(songName);
-                acc.getLibrary().addSongToPlaylist(plName, song);
+                acc.getLibrary().addSongToPlaylist(plName, song,acc);
                 break;
             case "4":
                 System.out.print("Playlist name: ");
@@ -393,10 +398,49 @@ public class View {
             return;
         default:
             System.out.println("❌ Invalid choice. Try again.");
-    }
+        	}
+        }
+    private static void searchAndAddSongsByGenre(Account acc) {
+        System.out.print("Enter the genre you want to search for: ");
+        String genre = sc.nextLine();
         
-    	
+        
+        ArrayList<Song> genreSongs = store.searchSongByGenreInStore(genre);
+        
+        if (genreSongs.isEmpty()) {
+            System.out.println("No songs found for the genre: " + genre);
+            return;
+        }
 
-    	
+        
+        System.out.println("\nSongs found for genre: " + genre);
+        for (int i = 0; i < genreSongs.size(); i++) {
+            Song song = genreSongs.get(i);
+            System.out.println((i + 1) + ". " + song.getName() + " by " + song.getArtist());
+        }
+
+        System.out.print("\nEnter the numbers of the songs you want to add (comma separated): ");
+        String input = sc.nextLine();
+        String[] songNumbers = input.split(",");
+
+       
+        for (String number : songNumbers) {
+            try {
+                int songIndex = Integer.parseInt(number.trim()) - 1; // Convert to zero-index
+                if (songIndex >= 0 && songIndex < genreSongs.size()) {
+                    Song song = genreSongs.get(songIndex);
+                    if (acc.getLibrary().addSongToLibrary(song, acc)) {
+                        System.out.println("Added '" + song.getName() + "' to your library.");
+                    } else {
+                        System.out.println("❌ Song '" + song.getName() + "' is already in your library.");
+                    }
+                } else {
+                    System.out.println("❌ Invalid song number: " + (songIndex + 1));
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Invalid input. Please enter valid song numbers.");
+            }
+        }
     }
+
 }
