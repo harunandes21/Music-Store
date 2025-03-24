@@ -12,7 +12,6 @@ import java.util.*;
 
 import model.Album;
 import model.LibraryModel;
-import model.Playlist;
 import model.Song;
 
 public class MusicStore {
@@ -21,6 +20,7 @@ public class MusicStore {
 	private HashMap<String, LibraryModel> libraries = new HashMap<String, LibraryModel>(); 
 	private ArrayList<Song> allSongs;
 	private static int id=1;
+	
 	public MusicStore() {
 		albums = new ArrayList<Album>();
 		allSongs = new ArrayList<>();

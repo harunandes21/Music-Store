@@ -10,6 +10,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import database.AccountManager;
@@ -23,13 +24,21 @@ public class LibraryModel {
 	private ArrayList<Song> allSongs;
 	private ArrayList<Song> recentlyPlayed;
 	private ArrayList<Song> frequentlyPlayed;
+	
+	private ArrayList<String> defaultPlaylists = new ArrayList<>();
 	 
     public LibraryModel() {
 		songPlays = new HashMap<Song, Integer>();
 		genreCount = new HashMap<String, Integer>();
 		recentlyPlayed = new ArrayList<>();
-		createDefaultPlaylists();
-		allSongs=  new ArrayList<Song>();
+		
+		defaultPlaylists.add("Favorites");
+        defaultPlaylists.add("Recently Played");
+        defaultPlaylists.add("Top Rated");
+        defaultPlaylists.add("Frequently Played");
+        createDefaultPlaylists();
+        
+		allSongs =  new ArrayList<Song>();
 		userPlaylists = new HashMap<String, Playlist>();
 		
     }
@@ -76,15 +85,13 @@ public class LibraryModel {
     	return new ArrayList<Song>(songList);
     }
     
-    public void rateSong(Song s, Double rate) {
-    	if (rate > 5) rate = 5.0; //sets max possible rating
-    	s.setRating(rate);
-    	//both will execute if rating = 5
-    	if (rate >= 4) {
+    public void rateSong(Song s, String rate) {
+    	boolean add = s.setRating(rate);
+    	if (add) {
+    		if (s.getFavorite()) {
+    			userPlaylists.get("Favorites").addSong(s);
+    		}
     		userPlaylists.get("Top Rated").addSong(s);
-    	}
-    	if (rate == 5) {
-    		userPlaylists.get("Favorites").addSong(s);
     	}
     }
     
@@ -183,18 +190,11 @@ public class LibraryModel {
     }
     //creating a new playlist
     public void createPlaylist(String name) {
-    	ArrayList<String> defaultPlaylists = new ArrayList<>();
-        defaultPlaylists.add("Favorites");
-        defaultPlaylists.add("Recently Played");
-        defaultPlaylists.add("Top Rated");
-        defaultPlaylists.add("Frequently Played");
         // avoided to print this at the beginning.
         Playlist newPlaylist = new Playlist(name, new ArrayList<>());
 		userPlaylists.put(newPlaylist.getName(), newPlaylist);
         if(!defaultPlaylists.contains(name)) 
-             System.out.println("Playlist '" + name + "' created.");
-        
-        
+            System.out.println("Playlist '" + name + "' created");
     }
     // song has to be in library to add id to any playlist!! 
     public void addSongToPlaylist(String playlistName, Song song,Account acc) {
@@ -257,10 +257,12 @@ public class LibraryModel {
     }
     
 
-    
+    public HashMap<String, Playlist> getPlaylistMap() {
+    	return new HashMap<>(userPlaylists);
+    }
 
     public ArrayList<Playlist> getAllPlaylists() {
-        return new ArrayList<>(userPlaylists.values());
+        return new ArrayList<Playlist>(userPlaylists.values());
     }
     public void deletePlaylist(String playlistName) {
         Playlist playlist = getPlaylistByName(playlistName);
@@ -296,11 +298,11 @@ public class LibraryModel {
 
     // sort for a playlist
     public void sortByRating(ArrayList<Song> songs) {
-        songs.sort((a, b) -> Double.compare(a.getRating(), b.getRating()));
+        songs.sort(Comparator.comparing(a -> a.getRating()));
     }
 
     public void sortByRating() {
-        allSongs.sort((a, b) -> Double.compare(a.getRating(), b.getRating()));
+        allSongs.sort(Comparator.comparing(a -> a.getRating()));
     }
 
     

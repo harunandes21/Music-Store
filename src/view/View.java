@@ -8,17 +8,11 @@ import model.Playlist;
 import model.Song;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.IOException;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import java.util.Scanner;
 
 public class View {
 
     private static MusicStore store;
-    private static HashMap<String, Account> accounts = new HashMap<>();
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -208,7 +202,7 @@ public class View {
             System.out.println("❌ Song not found.");
         }
     }
-
+    
     private static void libraryMenu(Account acc) {
         while (true) {
             System.out.println("\n=====================");
@@ -234,7 +228,7 @@ public class View {
                         System.out.println("3. Sort by Rating");
                         System.out.println("4. Shuffle Songs");
                         System.out.println("5. Remove a song from your library");
-                        System.out.println("6. Rate a song");
+                        System.out.println("6. Select A Song");
                         
                         System.out.println("7. Go Back");
 
@@ -250,7 +244,6 @@ public class View {
                                 break;
                             case "3":
                             	 sortSongsByRating(acc);
-                                
                                 break;
                             case "4":
                             	shuffle(acc);
@@ -261,6 +254,11 @@ public class View {
                             	 deleteSongFromLib(acc,Integer.parseInt(songid));
                             	
                                 break;
+                            case "6":
+                            	System.out.print("Select song by id: ");
+                            	int song = Integer.parseInt(sc.nextLine());
+                            	Song s = acc.getLibrary().getSongById(song);
+                            	lookAtSong(acc, s);
                             case "7":
                                 songsMenu = false; 
                                 break;
@@ -332,6 +330,163 @@ public class View {
     		}
     		
     	
+    } 
+    
+    private static void addToPlaylist(Account acc, Song s) {
+    	System.out.println("\n=====================");
+        System.out.println("📀 Eligible Playlists 📀");
+        System.out.println("=====================");
+        ArrayList<Playlist> playlists = acc.getLibrary().getAllPlaylists();
+        for (Playlist p: playlists) {
+        	if (!p.contains(s)) {
+        		System.out.println(p.getName());
+        	}
+        }
+        System.out.print("\nSelect Playlist (name): ");
+        String choice = sc.nextLine();
+        Playlist p = acc.getLibrary().getPlaylistByName(choice);
+        if (!p.contains(s)) {
+        	acc.getLibrary().addSongToPlaylist(choice, s, acc);
+        } else {
+        	System.out.println(s.getName() + " is already in playlist " + p.getName());
+        }
+        return;
+    }
+    
+    private static void lookAtSong(Account acc, Song s) {
+    	if (s.equals(null)) {
+    		System.out.println("Song not found.");
+    		return;
+    	}
+    	System.out.println("\n=====================");
+        System.out.println("📀 Options for song: " + s.getName()+ " 📀");
+        System.out.println("=====================");
+        
+        System.out.println("1. Rate Song");
+        System.out.println("2. Favorite Song");
+        System.out.println("3. Add Song to Playlist");
+        System.out.println("4. Play Song");
+        System.out.println("5. Go back");
+        
+        System.out.print("Select an option: ");
+        int choice = Integer.parseInt(sc.nextLine());
+    	
+        switch(choice) {
+        	case 1:
+        		rateSong(acc, s);
+        		break;
+        	case 2:
+        		acc.getLibrary().getPlaylistByName("Favorites").addSong(s);
+        		break;
+        	case 3:
+        		addToPlaylist(acc, s);
+        		break;
+        	case 4:
+        		acc.getLibrary().playSong(s);
+        	case 5: 
+        		return;
+        	default:
+        		System.out.println("Invalid choice");
+        		return;
+        }
+        return;
+    }
+    
+    private static void lookAtSong(Account acc, Playlist p, int sid) {
+    	Song s = p.getSongById(sid);
+    	if (s.equals(null)) {
+    		System.out.println("Song with id: " + sid + " not found.");
+    		lookAtPlaylist(acc, p); //return to prior view
+    		return;
+    	}
+    	System.out.println("\n=====================");
+        System.out.println("📀 Options for song: " + s.getName()+ " 📀");
+        System.out.println("=====================");
+        
+        System.out.println("1. Rate Song");
+        System.out.println("2. Remove from playlist");
+        System.out.println("3. Favorite Song");
+        System.out.println("4. Play Song");
+        System.out.println("5. Go back");
+        
+        System.out.print("Select an option: ");
+        int choice = Integer.parseInt(sc.nextLine());
+    	
+        switch(choice) {
+        	case 1:
+        		rateSong(acc, s);
+        		break;
+        	case 2:
+        		p.removeSong(s);
+        		break;
+        	case 3:
+        		acc.getLibrary().getPlaylistByName("Favorites").addSong(s);
+        		break;
+        	case 4:
+        		acc.getLibrary().playSong(s);
+        	case 5: 
+        		return;
+        	default:
+        		System.out.println("Invalid choice");
+        		return;
+        }
+        
+    }
+    
+    private static void rateSong(Account acc, Song s) {
+		System.out.print("\nEnter Rating (Numerical, 1-5): ");
+		String rating = sc.nextLine();
+		
+		s.setRating(rating);
+		
+		return;
+	}
+
+	private static void lookAtPlaylist(Account acc, Playlist p) {
+    	System.out.println("\n=====================");
+        System.out.println("📀 "+ p.getName() + " Songs: 📀");
+        System.out.println("=====================");
+    	
+    	p.getSongs().forEach(song -> System.out.println(song));
+    	
+    	System.out.print("Select Song by Id: ");
+    	
+    	int choice = Integer.parseInt(sc.nextLine());
+    	
+    	lookAtSong(acc, p, choice);
+    	
+    }
+    
+    private static void iteratePlaylists(Account acc) {
+    	HashMap<String, Playlist> playlists = acc.getLibrary().getPlaylistMap();
+    	
+    	System.out.println("\n=====================");
+        System.out.println(" 📀 Your Playlists: 📀 ");
+        System.out.println("=====================");
+        
+        int i = 1;
+        for (Playlist p : playlists.values()) {
+        	System.out.println(i + ". " + p.getName());
+        	i++;
+        }
+        
+        System.out.print("Enter name: ");
+        String name = sc.nextLine();
+        
+        lookAtPlaylist(acc, acc.getLibrary().getPlaylistByName(name));
+    }
+    
+    private static void addPlaylist(Account acc) {
+    	System.out.println("\n=====================");
+        System.out.println(" Add Playlist 🎶 ");
+        System.out.println("=====================");
+        
+        System.out.println("Enter Name: ");
+        
+        String name = sc.nextLine();
+        
+        LibraryModel lib = acc.getLibrary();
+        lib.createPlaylist(name);
     }
 
     private static void managePlaylists(Account acc) {
@@ -353,13 +508,11 @@ public class View {
                 if (playlists.isEmpty()) {
                     System.out.println("🎶 No playlists found.");
                 } else {
-                    playlists.forEach(playlist -> System.out.println("🎵 Playlist: " + playlist.getName()));
+                    iteratePlaylists(acc);
                 }
                 break;
             case "2":
-                System.out.print("Enter playlist name: ");
-                String name = sc.nextLine();
-                acc.getLibrary().createPlaylist(name);
+                addPlaylist(acc);
                 
                 break;
             case "3":
@@ -386,11 +539,15 @@ public class View {
                 acc.getLibrary().deletePlaylist(delName);
                 break;
             case "6":
+            	addPlaylist(acc);
+            	break;
+            case "7":
                 return;
             default:
                 System.out.println("❌ Invalid input.");
         }
     }
+
     public static void searchInLibrary(Account acc)
     {
     	System.out.println("1. Search a Song by Name.");
@@ -473,6 +630,5 @@ public class View {
             }
         }
 
-    }
-
+    }    
 }
