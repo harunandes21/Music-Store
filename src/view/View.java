@@ -189,7 +189,7 @@ public class View {
         System.out.println(" 🎶 Available Albums 🎶 ");
         System.out.println("=====================");
         store.getAlbums().forEach(album -> {
-            System.out.println("🎵 " + album.getName() + " by " + album.getArtist());
+            System.out.println("🎵 " + album.getName() + " by " + album.getArtist()+","+album.getGenre()+","+album.getYear()+"");
         });
         
         System.out.println("=====================");
@@ -219,8 +219,9 @@ public class View {
     		System.out.println("Album: " + title + " not found.");
     		return;
     	} 
+    	
     	System.out.println("=====================");
-        System.out.println(" Options: ");
+        System.out.println(" Options:for the Album "+a.getName()+","+ a.getArtist()+","+a.getGenre()+","+a.getYear()+"");
         System.out.println("=====================");
         
         System.out.println("1. Add Album to library");
