@@ -522,6 +522,64 @@ public class View {
 			return;
 		}
 		
+		System.out.println("\n=====================");
+        System.out.println(" Options: ");
+        System.out.println("=====================");
+        System.out.println("1. View Songs");
+        System.out.println("2. Sort Playlist");
+        System.out.println("3. Go Back");
+        
+        int choice = Integer.parseInt(sc.nextLine());
+        switch (choice) {
+        case 1:
+        	viewPlaylistSongs(acc, p);
+        	break;
+        case 2:
+        	sortPlaylist(acc, p);
+        	break;
+        case 3:
+        	return;
+        default:
+        	System.out.println("Invalid choice");
+        	return;
+        }
+	}
+	
+	private static void sortPlaylist(Account acc, Playlist p) {
+		System.out.println("\n=====================");
+        System.out.println(" Sorting Options: ");
+        System.out.println("=====================");
+        System.out.println("1. Shuffle");
+        System.out.println("2. Title");
+        System.out.println("3. Artist");
+        System.out.println("4. Rating");
+        System.out.println("5. Go Back");
+        
+		int choice = Integer.parseInt(sc.nextLine());
+		
+		switch (choice) {
+		case 1:
+			p.shuffle();
+			break;
+		case 2:
+			p.sortByName();
+			break;
+		case 3:
+			p.sortByArtist();
+			break;
+		case 4:
+			p.sortByRating();
+			break;
+		case 5:
+			return;
+		default: 
+			System.out.println("Invalid choice");
+			return;
+		}
+	}
+	
+	private static void viewPlaylistSongs(Account acc, Playlist p) {
+		
     	System.out.println("\n=====================");
         System.out.println("📀 "+ p.getName() + " Songs: 📀");
         System.out.println("=====================");
@@ -529,11 +587,17 @@ public class View {
     	
     	p.getSongs().forEach(song -> System.out.println(song));
     	
-    	System.out.print("Select Song by Id: ");
+    	System.out.print("Select Song by Id (or type back): ");
     	
-    	int choice = Integer.parseInt(sc.nextLine());
+    	String choice = sc.nextLine();
     	
-    	lookAtSong(acc, p, choice);
+    	if (choice.equals("back")) {
+    		return;
+    	}
+    	
+    	int newChoice = Integer.parseInt(choice);
+    	
+    	lookAtSong(acc, p, newChoice);
     	
     }
     
