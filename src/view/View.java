@@ -235,9 +235,14 @@ public class View {
         	break;
         case 2:
         	a.getSongs().forEach(s -> System.out.println(s));
-        	System.out.print("Select a song by Id: ");
+        	System.out.print("Select a song by Id (or type back): ");
         	
-        	int sid = Integer.parseInt(sc.nextLine());
+        	String in = sc.nextLine();
+        	
+        	if(in.equals("back")) {return;}
+        	
+        	int sid = Integer.parseInt(in);
+        	
         	Song s = a.getSongById(sid);
         	lookAtSong(acc, s);
         case 3:
@@ -427,7 +432,8 @@ public class View {
         System.out.println("3. Add Song to Playlist");
         System.out.println("4. Add Song to Library");
         System.out.println("5. Play Song");
-        System.out.println("6. Go back");
+        System.out.println("6. View Album");
+        System.out.println("7. Go back");
         
         System.out.print("Select an option: ");
         int choice = Integer.parseInt(sc.nextLine());
@@ -452,7 +458,11 @@ public class View {
         		break;
         	case 5:
         		acc.getLibrary().playSong(s);
-        	case 6: 
+        		break;
+        	case 6:
+        		Album al = store.findAlbumBySong(s);
+        		showAlbum(acc, al.getName());
+        	case 7: 
         		return;
         	default:
         		System.out.println("Invalid choice");
@@ -476,7 +486,8 @@ public class View {
         System.out.println("2. Remove from playlist");
         System.out.println("3. Favorite Song");
         System.out.println("4. Play Song");
-        System.out.println("5. Go back");
+        
+        System.out.println("6. Go back");
         
         System.out.print("Select an option: ");
         int choice = Integer.parseInt(sc.nextLine());
@@ -493,8 +504,11 @@ public class View {
         		break;
         	case 4:
         		acc.getLibrary().playSong(s);
-        	case 5: 
+        	case 6: 
         		return;
+        	case 5:
+        		Album al = store.findAlbumBySong(s);
+        		showAlbum(acc, al.getName());
         	default:
         		System.out.println("Invalid choice");
         		return;
@@ -522,27 +536,38 @@ public class View {
 			return;
 		}
 		
-		System.out.println("\n=====================");
-        System.out.println(" Options: ");
-        System.out.println("=====================");
-        System.out.println("1. View Songs");
-        System.out.println("2. Sort Playlist");
-        System.out.println("3. Go Back");
-        
-        int choice = Integer.parseInt(sc.nextLine());
-        switch (choice) {
-        case 1:
-        	viewPlaylistSongs(acc, p);
-        	break;
-        case 2:
-        	sortPlaylist(acc, p);
-        	break;
-        case 3:
-        	return;
-        default:
-        	System.out.println("Invalid choice");
-        	return;
-        }
+		boolean end = false;
+		
+		while (!end) {
+			System.out.println("\n=====================");
+			System.out.println(" Options: ");
+			System.out.println("=====================");
+			
+			p.getSongs().forEach(s -> System.out.println(s));
+			
+			System.out.println("\n1. Select A Song");
+			System.out.println("2. Sort Playlist");
+			System.out.println("3. Go Back");
+			
+			System.out.print("\nYour choice: ");
+			
+			String choice = sc.nextLine();
+			switch (choice) {
+			case "1":
+				viewPlaylistSongs(acc, p);
+				break;
+			case "2":
+				sortPlaylist(acc, p);
+				break;
+			case "3":
+				end = true;
+				return;
+			default:
+				System.out.println("Invalid choice");
+				return;
+			}
+		}
+		
 	}
 	
 	private static void sortPlaylist(Account acc, Playlist p) {
@@ -608,10 +633,8 @@ public class View {
         System.out.println(" 📀 Your Playlists: 📀 ");
         System.out.println("=====================");
         
-        int i = 1;
         for (Playlist p : playlists.values()) {
-        	System.out.println(i + ". " + p.getName());
-        	i++;
+        	System.out.println(p.getName());
         }
         
         System.out.print("Enter name: ");
@@ -691,6 +714,36 @@ public class View {
                 System.out.println("❌ Invalid input.");
         }
     }
+    
+    private static void searchResPrompt(Account acc) {
+    	System.out.println("\n=================");
+    	System.out.println(" Options: ");
+    	System.out.println("=================\n");
+    	
+    	System.out.println("1. Pick A Song");
+    	System.out.println("2. Go Back");
+    	
+    	System.out.print("Your choice: ");
+    	
+    	String choice = sc.nextLine();
+    	switch(choice) {
+    	case "1":
+    		System.out.print("Pick Song by Id: ");
+    		
+    		int sid = Integer.parseInt(sc.nextLine());
+    		Song res = acc.getLibrary().getSongById(sid);
+    		
+    		lookAtSong(acc, res);
+    		
+    		break;
+    	case "2":
+    		return;
+    	default: 
+    		System.out.println("Invalid choice");
+   			return;
+    	}
+    	
+    }
 
     public static void searchInLibrary(Account acc)
     {
@@ -700,19 +753,24 @@ public class View {
         String choice = sc.nextLine();
         switch (choice) {
         case "1":
-        	System.out.print("Enter the Song Name: ");
-        	String songName = sc.nextLine();
-        	acc.getLibrary().getSongByName(songName);
+        	System.out.print("Enter a keyword: ");
+        	String title = sc.nextLine();
         	
+        	ArrayList<Song> titleResults = acc.getLibrary().searchSongByTitle(title);
+        	for (Song song : titleResults) {
+        		System.out.println(song);
+        	}
+        	searchResPrompt(acc);
             break;
         case "2":
         	System.out.print("Please type in one genre to search: ");
         	System.out.print("Pop---Rock---Alternative---Latin---Traditional Country---6.Singer/SongWriter  ");
         	String genre = sc.nextLine();
-        	ArrayList<Song> results= new ArrayList<>(acc.getLibrary().searchSongByGenre(genre));
-        	for(Song song: results)
-        	System.out.println(song);
-        	
+        	ArrayList<Song> results = new ArrayList<>(acc.getLibrary().searchSongByGenre(genre));
+        	for(Song song: results) {
+        		System.out.println(song);
+        	}
+        	searchResPrompt(acc);
             break;
         case "4":
             return;

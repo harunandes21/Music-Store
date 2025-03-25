@@ -134,6 +134,20 @@ public class LibraryModel {
         AccountManager.updateAccount(acc);
     }
     
+    public void addSongToPlaylist(String playlistName, Song song,Account acc) {
+        Playlist playlist = userPlaylists.get(playlistName);
+        if (playlist == null) {
+            return;
+        }
+        else if (song == null) {
+            return;
+        }
+        else 
+        playlist.addSong(song);
+        AccountManager.updateAccount(acc);
+        
+    }
+    
     //method is to be ran any time a song is added to the library and it wasn't already there
     //i.e. this method should not be ran if song is added to playlist when it is already in library
     public boolean addSongToLibrary(Song s, Album a, Account acc) {
@@ -192,25 +206,7 @@ public class LibraryModel {
     public void createPlaylist(String name) {
         // avoided to print this at the beginning.
         Playlist newPlaylist = new Playlist(name, new ArrayList<>());
-		userPlaylists.put(newPlaylist.getName(), newPlaylist);
-
-        if(!defaultPlaylists.contains(name)) 
-
-
-    }
-    // song has to be in library to add id to any playlist!! 
-    public void addSongToPlaylist(String playlistName, Song song,Account acc) {
-        Playlist playlist = userPlaylists.get(playlistName);
-        if (playlist == null) {
-            return;
-        }
-        else if (song == null) {
-            return;
-        }
-        else 
-        playlist.addSong(song);
-        AccountManager.updateAccount(acc);
-        
+		userPlaylists.put(newPlaylist.getName(), newPlaylist);     
     }
 
     public Playlist getPlaylistByName(String name) {
@@ -243,6 +239,18 @@ public class LibraryModel {
             }
         
         return null;  
+    }
+    
+    public ArrayList<Song> searchSongByTitle(String title){
+    	ArrayList<Song> results = new ArrayList<>();
+    	
+    	for (Song song: allSongs) {
+    		if(song.getName().toLowerCase().contains(title)) {
+    			results.add(song);
+    		}
+    	}
+    	
+    	return results;
     }
     
     public ArrayList<Song> searchSongByGenre(String genre)
