@@ -17,14 +17,8 @@ public class AccountManager {
     	if (account.getLibrary().getAllPlaylists().isEmpty()) {
             account.getLibrary().createDefaultPlaylists();
         }
-    	File dir = new File(ACCOUNT_DIRECTORY);
-    	if (!dir.exists()) {
-    	    if (dir.mkdirs()) {
-    	        System.out.println("Created accounts directory: " + dir.getAbsolutePath());
-    	    } else {
-    	        System.out.println("Failed to create accounts directory.");
-    	    }
-    	}
+    	
+    	
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         File accountFile = new File(ACCOUNT_DIRECTORY, account.getUsername() + ".json");  // File named by username
         try (FileWriter writer = new FileWriter(accountFile)) {

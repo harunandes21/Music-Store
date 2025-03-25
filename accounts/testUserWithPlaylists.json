@@ -1,0 +1,37 @@
+{
+  "username": "testUserWithPlaylists",
+  "hashedPassword": "$2a$10$4YoYOx9xhNNmZ3G7QHms.uR27xpjA/kPzi/Yh.asSFXZ0YOzCfdQK",
+  "library": {
+    "userPlaylists": {
+      "Frequently Played": {
+        "name": "Frequently Played",
+        "songs": [],
+        "isAlbum": false
+      },
+      "Top Rated": {
+        "name": "Top Rated",
+        "songs": [],
+        "isAlbum": false
+      },
+      "Recently Played": {
+        "name": "Recently Played",
+        "songs": [],
+        "isAlbum": false
+      },
+      "Favorites": {
+        "name": "Favorites",
+        "songs": [],
+        "isAlbum": false
+      }
+    },
+    "songPlays": {},
+    "genreCount": {},
+    "allSongs": [],
+    "defaultPlaylists": [
+      "Favorites",
+      "Recently Played",
+      "Top Rated",
+      "Frequently Played"
+    ]
+  }
+}

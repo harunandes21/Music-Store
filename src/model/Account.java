@@ -27,10 +27,10 @@ public class Account {
 		return username;
 	}
 	
-	public String getHashedPassword() {// for testing if hash works. to be removed later.
-		return hashedPassword;
-	}
-	
+//	public String getHashedPassword() {// for testing if hash works. to be removed later.
+//		return hashedPassword;
+//	}
+//	
 	public LibraryModel getLibrary() {
 		return library;
 	}
