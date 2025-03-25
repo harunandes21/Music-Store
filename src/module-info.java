@@ -6,6 +6,7 @@ module CSCLA1{
 	requires jbcrypt;
 	
 	requires com.google.gson;
+	requires org.junit.jupiter.api;
 	
     exports view;
     exports test to junit;

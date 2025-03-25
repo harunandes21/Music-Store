@@ -19,10 +19,10 @@ import database.AccountManager;
 public class LibraryModel {
 
     private HashMap<String, Playlist> userPlaylists = new HashMap<String, Playlist>();
-	private HashMap<Song, Integer> songPlays;
-	private HashMap<String, Integer> genreCount;
-	private ArrayList<Song> songList;
-	private ArrayList<Song> allSongs;
+	private HashMap<Song, Integer> songPlays = new HashMap<>();
+	private HashMap<String, Integer> genreCount = new HashMap<>();;
+	private ArrayList<Song> songList = new ArrayList<Song>();
+	private ArrayList<Song> allSongs = new ArrayList<Song>();;
 	
 	private ArrayList<String> defaultPlaylists = new ArrayList<>();
 	 
@@ -109,15 +109,23 @@ public class LibraryModel {
     		songPlays.put(s, songPlays.get(s)+1); 
     	} else {songPlays.put(s,  1);}
     	if (recentlyPlayed.getSize() == 10) {
-            recentlyPlayed.trimEnd(); // remove the least recently played song
-            recentlyPlayed.addAtBeginning(s);
+    		if (recentlyPlayed.contains(s)) {
+    			recentlyPlayed.removeSong(s);
+    		} else {
+	            recentlyPlayed.trimEnd(); // remove the least recently played song
+	            recentlyPlayed.addAtBeginning(s);
+    		}
         } else {recentlyPlayed.addAtBeginning(s);} //adds song if recently played isnt 10 yet
     	if (frequentlyPlayed.getSize() < 10) {
-    		frequentlyPlayed.addSong(s);
+    		if (!frequentlyPlayed.contains(s)) {
+    			frequentlyPlayed.addSong(s);
+    		}
     	} else {
     		if (songPlays.get(s) > songPlays.get(frequentlyPlayed.getEnd())) {
-    			frequentlyPlayed.trimEnd();
-    			frequentlyPlayed.addSong(s);
+    			if (!frequentlyPlayed.contains(s)) {    				
+    				frequentlyPlayed.trimEnd();
+    				frequentlyPlayed.addSong(s);
+    			}
     		}
     	}
     	frequentlyPlayed.sortByPlays(songPlays);

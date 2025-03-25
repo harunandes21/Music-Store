@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class Playlist {
 	
 	protected String name;
-	protected ArrayList<Song> songs;
+	protected ArrayList<Song> songs = new ArrayList<Song>();
 	protected boolean isAlbum = false;
 
 	/*
