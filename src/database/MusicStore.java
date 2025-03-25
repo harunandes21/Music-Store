@@ -49,11 +49,11 @@ public class MusicStore {
 	}
 	
 	public ArrayList<Album> getAlbums() {
-		return albums;
+		return new ArrayList<Album> (albums);
 	}
 	
 	public ArrayList<Song> getAllSongs() {
-	    return allSongs; 
+	    return new ArrayList<Song>(allSongs); 
 	}
 	// used for library methods. searcing son while adding it to a playlist.
 	public Song searchSongByName(String name) {
@@ -120,31 +120,6 @@ public class MusicStore {
 	    }
 
 	}
-	//used for music store
-	// can search 2 types, song or album. works for both title and author.
-//	public ArrayList<Song> performSearch(String searchQuery, String searchType) {
-//	    ArrayList<Song> results = new ArrayList<>();
-//	    
-//	    if (searchType.equals("Song")) {
-//	      
-//	        for (Song song : getAllSongs()) {
-//	            if (song.getName().toLowerCase().contains(searchQuery.toLowerCase()) || 
-//	                song.getArtist().toLowerCase().contains(searchQuery.toLowerCase())) {
-//	                results.add(song);
-//	            }
-//	        }
-//	    } else if (searchType.equals("Album")) {
-//	        
-//	        for (Song song : getAllSongs()) {
-//	            if (song.getAlbum().getTitle().toLowerCase().contains(searchQuery.toLowerCase()) || 
-//	                song.getAlbum().getArtist().toLowerCase().contains(searchQuery.toLowerCase())) {
-//	                results.add(song);
-//	            }
-//	        }
-//	    }
-//	    
-//	    return results;
-//	}	
 	
 	// In MusicStore class
 	public ArrayList<Song> searchSongByGenreInStore(String genre) {
