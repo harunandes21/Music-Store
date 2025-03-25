@@ -25,6 +25,8 @@ class test2 {
 		
 		Account acc = new Account(user, "123", new LibraryModel());
 		
+		AccountManager.saveAccount(acc);
+		
 		acc.attemptLogin("123");
 		
 		LibraryModel lib = acc.getLibrary();
@@ -49,12 +51,22 @@ class test2 {
 		
 		lib.addSongToPlaylist("test playlist", s2, acc);
 		Assert.assertTrue(lib.getPlaylistByName("test playlist").contains(s2));
+		Assert.assertTrue(lib.getSongList().contains(s2));
 		
+		lib.getAllPlaylists().forEach(p -> System.out.print(p.getName()));
+		lib.getPlaylistByName("Recently Played").addSong(s);
 		lib.playSong(s2);
 		Assert.assertTrue(lib.getSongPlays(s2) == 1);
 		
+		lib.addSongToPlaylist("test playlist", s, acc);
+		
+		lib.removeSongFromLib(s.getSongId(), acc);
+		Assert.assertFalse(lib.getAllSongs().contains(s));
+		
 		lib.deletePlaylist("test playlist");
 		Assert.assertFalse(lib.getPlaylistMap().containsKey("test playlist"));
+		
+	
 		
 		
 		
