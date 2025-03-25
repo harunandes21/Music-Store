@@ -52,7 +52,7 @@ public class Album {
 	}
 
 	public ArrayList<Song> getSongs() {
-		return (ArrayList<Song>) songs.clone(); //clone = immutable
+		return new ArrayList<>(songs); //clone = immutable
 	}
 	
 	public void addSong(Song song) {

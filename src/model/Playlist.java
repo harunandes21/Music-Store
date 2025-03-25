@@ -10,6 +10,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class Playlist {
 	
@@ -24,6 +25,7 @@ public class Playlist {
 		this.name = name;
 		this.songs = songs;
 	}
+	
 	public Playlist() {
         this.songs = new ArrayList<>();
     }
@@ -32,13 +34,25 @@ public class Playlist {
 		isAlbum = true;
 	}
 	
+	/*
+	 * @pre: n is a correct song id
+	 */
+	public Song getSongById(int n) {
+		for (Song s: songs) {
+			if (s.getSongId() == n) {
+				return s;
+			}
+		}
+		return null;
+	}
+	
 	public boolean isAlbum() {return isAlbum;} //immutable, no escape
 	
 	public String getName() {return name;} //immutable, no escape
 	
 	public void setName(String name) {this.name = name;}
 	
-	public ArrayList<Song> getSongs() {return (ArrayList<Song>) songs.clone();} //no escaping reference
+	public ArrayList<Song> getSongs() {return new ArrayList<Song> (songs); } //no escaping reference
 	
 	public void addSong(Song song) {songs.add(song);}
 	
@@ -61,5 +75,20 @@ public class Playlist {
 	
 	// SORTING METHODS
 	
-	
+    public void shuffle() {
+		Collections.shuffle(songs);
+	}
+
+    public void sortByName() {
+    	songs.sort((a, b) -> a.getName().compareTo(b.getName()));
+    }
+
+    public void sortByArtist() {
+    	songs.sort((a, b) -> a.getArtist().compareTo(b.getArtist()));
+    }
+
+    // sort for a playlist
+    public void sortByRating() {
+    	 songs.sort(Comparator.comparing(a -> a.getRating()));
+    }
 }
