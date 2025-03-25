@@ -458,6 +458,7 @@ public class View {
         		break;
         	case 5:
         		acc.getLibrary().playSong(s);
+        		
         		break;
         	case 6:
         		Album al = store.findAlbumBySong(s);

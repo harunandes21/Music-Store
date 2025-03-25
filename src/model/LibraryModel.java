@@ -120,6 +120,7 @@ public class LibraryModel {
     		}
     	}
     	frequentlyPlayed.sortByPlays(songPlays);
+    	s.play();
     }
     
     public void addGenre(String g) {

@@ -9,7 +9,7 @@ package model;
 
 import java.util.Objects;
 
-public class Song {
+public class Song implements Playable {
 	
 	public static enum Rating {UNRATED, ONE, TWO, THREE, FOUR, FIVE};
 	private Rating rating;
@@ -92,5 +92,10 @@ public class Song {
 		
 		return songId + 0;
 	}
+	
+	@Override
+    public void play() {
+        System.out.println("Now playing: " + title + " by " + artist);
+    }
 
 }
