@@ -3,6 +3,7 @@ package view;
 import database.AccountManager;
 import database.MusicStore;
 import model.Account;
+import model.Album;
 import model.LibraryModel;
 import model.Playlist;
 import model.Song;
@@ -188,16 +189,73 @@ public class View {
         System.out.println(" 🎶 Available Albums 🎶 ");
         System.out.println("=====================");
         store.getAlbums().forEach(album -> {
-            System.out.println("🎵 " + album.getTitle() + " by " + album.getArtist());
+            System.out.println("🎵 " + album.getName() + " by " + album.getArtist());
         });
+        
+        System.out.println("=====================");
+        System.out.println(" Options: ");
+        System.out.println("=====================");
+        System.out.println("1. Select Album");
+        System.out.println("2. Go Back");
+
+        System.out.print("Your choice: ");
+        String choice = sc.nextLine();
+        
+        if (choice.equals("1")) {
+        	System.out.print("Select an album by name: ");
+        	String newChoice = sc.nextLine();
+        	showAlbum(account, newChoice);
+        } else if (choice.equals("2")) {
+        	return;
+        } else {
+        	System.out.println("Invalid choice");
+        	return;
+        }
+    }
+    
+    private static void showAlbum(Account acc, String title) {
+    	Album a = store.findAlbum(title);
+    	if (a == null) {
+    		System.out.println("Album: " + title + " not found.");
+    		return;
+    	} 
+    	System.out.println("=====================");
+        System.out.println(" Options: ");
+        System.out.println("=====================");
+        
+        System.out.println("1. Add Album to library");
+        System.out.println("2. View Songs");
+        System.out.println("3. Go Back");
+        System.out.print("\nYour Choice: ");
+        
+        int choice = Integer.parseInt(sc.nextLine());
+        switch (choice) {
+        case 1:
+        	acc.getLibrary().addPlaylist(a); //add entire album
+        	break;
+        case 2:
+        	a.getSongs().forEach(s -> System.out.println(s));
+        	System.out.print("Select a song by Id: ");
+        	
+        	int sid = Integer.parseInt(sc.nextLine());
+        	Song s = a.getSongById(sid);
+        	lookAtSong(acc, s);
+        case 3:
+        	return;
+        default:
+        	System.out.println("Invalid choice.");
+        	return;
+        }
+    	
     }
 
     private static void addSongToLibrary(Account acc) {
         System.out.print("Enter the name of the song you want to add: ");
         String songName = sc.nextLine();
         Song song = store.searchSongByName(songName); // Assuming this method exists in MusicStore
+        Album a = store.findAlbumBySong(song);
         if (song != null) {
-          if(  acc.getLibrary().addSongToLibrary(song,acc))
+          if(  acc.getLibrary().addSongToLibrary(song,a,acc))
             System.out.println("Added '" + song.getName() + "' to your library.");
           else System.out.println("❌ Song is already in your library");
         } else {
@@ -367,8 +425,9 @@ public class View {
         System.out.println("1. Rate Song");
         System.out.println("2. Favorite Song");
         System.out.println("3. Add Song to Playlist");
-        System.out.println("4. Play Song");
-        System.out.println("5. Go back");
+        System.out.println("4. Add Song to Library");
+        System.out.println("5. Play Song");
+        System.out.println("6. Go back");
         
         System.out.print("Select an option: ");
         int choice = Integer.parseInt(sc.nextLine());
@@ -384,8 +443,16 @@ public class View {
         		addToPlaylist(acc, s);
         		break;
         	case 4:
+        		Album a = store.findAlbumBySong(s);
+                if (acc.getLibrary().addSongToLibrary(s,a,acc)) {
+                    System.out.println("Added '" + s.getName() + "' to your library.");
+                } else {
+                    System.out.println("❌ Song '" + s.getName() + "' is already in your library.");
+                }
+        		break;
+        	case 5:
         		acc.getLibrary().playSong(s);
-        	case 5: 
+        	case 6: 
         		return;
         	default:
         		System.out.println("Invalid choice");
@@ -439,15 +506,26 @@ public class View {
 		System.out.print("\nEnter Rating (Numerical, 1-5): ");
 		String rating = sc.nextLine();
 		
-		s.setRating(rating);
+		acc.getLibrary().rateSong(s, rating);
 		
 		return;
 	}
 
 	private static void lookAtPlaylist(Account acc, Playlist p) {
+		
+		if (p == null) {
+			System.out.println("\nPlaylist does not exist.");
+			return;
+		}
+		if (p.isEmpty()) {
+			System.out.println("\nPlaylist: " + p.getName() + " is empty.");
+			return;
+		}
+		
     	System.out.println("\n=====================");
         System.out.println("📀 "+ p.getName() + " Songs: 📀");
         System.out.println("=====================");
+        
     	
     	p.getSongs().forEach(song -> System.out.println(song));
     	
@@ -614,8 +692,8 @@ public class View {
                     if (song.getSongId() == songId) {
                         songFound = true;
 
-                        
-                        if (acc.getLibrary().addSongToLibrary(song, acc)) {
+                        Album a = store.findAlbumBySong(song);
+                        if (acc.getLibrary().addSongToLibrary(song,a,acc)) {
                             System.out.println("Added '" + song.getName() + "' to your library.");
                         } else {
                             System.out.println("❌ Song '" + song.getName() + "' is already in your library.");

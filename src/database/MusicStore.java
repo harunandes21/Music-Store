@@ -26,7 +26,23 @@ public class MusicStore {
 		allSongs = new ArrayList<>();
 	}
 	
+	public Album findAlbumBySong(Song s) {
+		for (Album a: albums) {
+			if (a.contains(s)) {
+				return a;
+			}
+		}
+		return null;
+	}
 	
+	public Album findAlbum(String name) {
+		for (Album a: albums) {
+			if (a.getName().toLowerCase().equals(name.toLowerCase())) {
+				return a;
+			}
+		}
+		return null;
+	}
 	
 	public LibraryModel getLibrary(String user) {
 		return libraries.get(user);

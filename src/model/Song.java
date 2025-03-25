@@ -28,7 +28,7 @@ public class Song {
 		title=name;
 		artist=author;
 		this.genre = genre.toLowerCase(); //case insensitive
-		this.albumTitle = a.getTitle();
+		this.albumTitle = a.getName();
 		songId=id;
 	}
 	public Song() {

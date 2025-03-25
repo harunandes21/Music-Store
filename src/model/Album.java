@@ -8,36 +8,31 @@ package model;
 
 import java.util.ArrayList;
 
-public class Album {
+public class Album extends Playlist{
 
 	private String artist;
 	private String year;
-	private String title;
 	private String genre;
-	private ArrayList<Song> songs = new ArrayList<Song>();
 	
 	/*
 	 * @pre title, artis, genre, year, songs != null
 	 */
 
 	public Album(String title, String artist, String genre, String year) {
-		this.title = title;
+		this.name = title;
 		this.artist = artist;
 		this.genre = genre;
 		this.year = year;
+		setAlbum();
 	}
 	public Album() {
-        this.title = "";
+        this.name = "";
         this.artist = "";
         this.genre = "";
         this.year = "";
         this.songs = new ArrayList<>();  // Initialize songs list
+        setAlbum();
     }
-	
-
-	public String getTitle() { //immutable
-		return title;
-	} 
 
 	public String getArtist() { //immutable
 		return artist;
@@ -49,13 +44,5 @@ public class Album {
 
 	public String getYear() { //immutable
 		return year;
-	}
-
-	public ArrayList<Song> getSongs() {
-		return new ArrayList<>(songs); //clone = immutable
-	}
-	
-	public void addSong(Song song) {
-		songs.add(song);
 	}
 }
