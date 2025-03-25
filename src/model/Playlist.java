@@ -11,12 +11,13 @@ package model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class Playlist {
 	
-	private String name;
-	private ArrayList<Song> songs;
-	private boolean isAlbum = false;
+	protected String name;
+	protected ArrayList<Song> songs;
+	protected boolean isAlbum = false;
 
 	/*
 	 * @pre name, songs != null
@@ -32,6 +33,18 @@ public class Playlist {
 	
 	public void setAlbum() {
 		isAlbum = true;
+	}
+	
+	public int getSize() {
+		return songs.size();
+	}
+	
+	public void trimEnd() {
+		songs.remove(getSize()-1);
+	}
+	
+	public void addAtBeginning(Song s) {
+		songs.add(0, s);
 	}
 	
 	/*
@@ -73,22 +86,38 @@ public class Playlist {
         return false; 
     }
 	
+	public Song getEnd() {
+		return songs.get(getSize()-1);
+	}
+	
+	public boolean isEmpty() {
+		return (songs.size() == 0);
+	}
+	
 	// SORTING METHODS
 	
     public void shuffle() {
+    	if (isAlbum) {return;}
 		Collections.shuffle(songs);
 	}
+    
+    public void sortByPlays(HashMap<Song, Integer> plays) {
+    	songs.sort((a,b) -> plays.get(a).compareTo(plays.get(b)));
+    }
 
     public void sortByName() {
+    	if (isAlbum) {return;}
     	songs.sort((a, b) -> a.getName().compareTo(b.getName()));
     }
 
     public void sortByArtist() {
+    	if (isAlbum) {return;}
     	songs.sort((a, b) -> a.getArtist().compareTo(b.getArtist()));
     }
 
     // sort for a playlist
     public void sortByRating() {
-    	 songs.sort(Comparator.comparing(a -> a.getRating()));
+    	if (isAlbum) {return;}
+    	songs.sort(Comparator.comparing(a -> a.getRating()));
     }
 }

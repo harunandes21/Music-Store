@@ -22,15 +22,12 @@ public class LibraryModel {
 	private HashMap<String, Integer> genreCount;
 	private ArrayList<Song> songList;
 	private ArrayList<Song> allSongs;
-	private ArrayList<Song> recentlyPlayed;
-	private ArrayList<Song> frequentlyPlayed;
 	
 	private ArrayList<String> defaultPlaylists = new ArrayList<>();
 	 
     public LibraryModel() {
 		songPlays = new HashMap<Song, Integer>();
 		genreCount = new HashMap<String, Integer>();
-		recentlyPlayed = new ArrayList<>();
 		
 		defaultPlaylists.add("Favorites");
         defaultPlaylists.add("Recently Played");
@@ -105,23 +102,24 @@ public class LibraryModel {
     // increases song plays or enters song into songPlays
     // also updates frequently played
     public void playSong(Song s) {
+    	Playlist recentlyPlayed = userPlaylists.get("Recently Played");
+    	Playlist frequentlyPlayed = userPlaylists.get("Frequently Played");
     	if (songPlays.containsKey(s)) {
     		songPlays.put(s, songPlays.get(s)+1); 
     	} else {songPlays.put(s,  1);}
-    	if (recentlyPlayed.size() == 10) {
-            recentlyPlayed.remove(recentlyPlayed.size() - 1); // remove the least recently played song
-            recentlyPlayed.add(0, s);
-        } else {recentlyPlayed.add(0, s);} //adds song if recently played isnt 10 yet
-    	if (frequentlyPlayed.size() < 10) {
-    		frequentlyPlayed.add(frequentlyPlayed.size()-1,s); //add song at end
-    		frequentlyPlayed.sort((a, b) -> songPlays.get(a).compareTo(songPlays.get(b))); 
+    	if (recentlyPlayed.getSize() == 10) {
+            recentlyPlayed.trimEnd(); // remove the least recently played song
+            recentlyPlayed.addAtBeginning(s);
+        } else {recentlyPlayed.addAtBeginning(s);} //adds song if recently played isnt 10 yet
+    	if (frequentlyPlayed.getSize() < 10) {
+    		frequentlyPlayed.addSong(s);
     	} else {
-    		if (songPlays.get(s) > songPlays.get(frequentlyPlayed.get(9))) {
-    			frequentlyPlayed.remove(9);
-    			frequentlyPlayed.add(9, s);
-    			frequentlyPlayed.sort((a, b) -> songPlays.get(a).compareTo(songPlays.get(b))); //sort frequently played every time it is updated
+    		if (songPlays.get(s) > songPlays.get(frequentlyPlayed.getEnd())) {
+    			frequentlyPlayed.trimEnd();
+    			frequentlyPlayed.addSong(s);
     		}
     	}
+    	frequentlyPlayed.sortByPlays(songPlays);
     }
     
     public void addGenre(String g) {
@@ -133,40 +131,47 @@ public class LibraryModel {
     private void createPlaylistForGenre(String genre,Account acc) {
         Playlist genrePlaylist = new Playlist(genre, new ArrayList<>());
         userPlaylists.put(genre, genrePlaylist);
-        System.out.println("Playlist for genre '" + genre + "' created.");
         AccountManager.updateAccount(acc);
     }
     
     //method is to be ran any time a song is added to the library and it wasn't already there
     //i.e. this method should not be ran if song is added to playlist when it is already in library
-    public boolean addSongToLibrary(Song s, Account acc) {
+    public boolean addSongToLibrary(Song s, Album a, Account acc) {
     	if(!allSongs.contains(s)) {
     	// check if song is already in library
-    	String genre = s.getGenre();
-    	addGenre(genre);
-    	//if album in library, add to album
-    	//else add album to library with only the given song
-    	//song should also be added individually i guess
-    	allSongs.add(s);
-    	if (genreCount.get(genre) >= 10 && !userPlaylists.containsKey(genre)) {
-            createPlaylistForGenre(genre,acc);
-            
-            }
-    	AccountManager.updateAccount(acc);
-    	ArrayList<Song> genreSongs = searchSongByGenre(genre); 
-        Playlist genrePlaylist = userPlaylists.get(genre); 
-        
-        if(genrePlaylist!=null) {
-        for (Song song : genreSongs) {
-             if (!genrePlaylist.contains(song)) 
-               addSongToPlaylist(genre,song,acc) ;
-            
-        }
-    	
-    	return true;
+    		if (userPlaylists.containsKey(a.getName())) {
+    			if (!userPlaylists.get(a.getName()).contains(s)) {
+    				userPlaylists.get(a.getName()).addSong(s);
+    			}
+    		} else {
+    			Playlist halfAlbum = new Playlist(a.getName(), new ArrayList<Song>());
+    			halfAlbum.addSong(s);
+    			userPlaylists.put(a.getName(), halfAlbum);
     		}
-        return true;
-    	}
+	    	String genre = s.getGenre();
+	    	addGenre(genre);
+	    	//if album in library, add to album
+	    	//else add album to library with only the given song
+	    	//song should also be added individually i guess
+	    	allSongs.add(s);
+	    	if (genreCount.get(genre) >= 10 && !userPlaylists.containsKey(genre)) {
+	            createPlaylistForGenre(genre,acc);
+	            
+	            }
+	    	AccountManager.updateAccount(acc);
+	    	ArrayList<Song> genreSongs = searchSongByGenre(genre); 
+	        Playlist genrePlaylist = userPlaylists.get(genre); 
+	        
+	        if(genrePlaylist!=null) {
+		        for (Song song : genreSongs) {
+		             if (!genrePlaylist.contains(song)) 
+		               addSongToPlaylist(genre,song,acc); 
+		        }
+	    	
+		        return true;
+	    	}
+	        return true;
+	    	}
     	else 
     		
     	
@@ -177,56 +182,49 @@ public class LibraryModel {
     public ArrayList<Song> getAllSongs() {
         return new ArrayList<Song>(allSongs);
     }
-    public ArrayList<Song> getRecentlyPlayed() {
-        return new ArrayList<>(recentlyPlayed);
-    }
     
     // adding a whole album to our library
     public void addPlaylist(Playlist playlist) {
         playlist.setAlbum();
         userPlaylists.put(playlist.getName(), playlist);
-        
-        System.out.println("Playlist '" + playlist.getName() + "' added to library.");
     }
     //creating a new playlist
     public void createPlaylist(String name) {
         // avoided to print this at the beginning.
         Playlist newPlaylist = new Playlist(name, new ArrayList<>());
 		userPlaylists.put(newPlaylist.getName(), newPlaylist);
-        if(!defaultPlaylists.contains(name)) 
-            System.out.println("Playlist '" + name + "' created");
     }
     // song has to be in library to add id to any playlist!! 
     public void addSongToPlaylist(String playlistName, Song song,Account acc) {
         Playlist playlist = userPlaylists.get(playlistName);
         if (playlist == null) {
-            System.out.println("Playlist '" + playlistName + "' not found.");
             return;
         }
         else if (song == null) {
-            System.out.println("Song not found.");
             return;
         }
         else 
         playlist.addSong(song);
-        System.out.println("Song '" + song.getName() + "' added to playlist '" + playlistName + "'.");
         AccountManager.updateAccount(acc);
         
     }
 
     public Playlist getPlaylistByName(String name) {
-        return userPlaylists.get(name);
+    	for (String s : userPlaylists.keySet()) {
+    		if (name.toLowerCase().equals(s.toLowerCase())) {
+    			return userPlaylists.get(s);
+    		}
+    	}
+    	return null;
     }
     
     //must receive actual song object which is expected to be within the playlist
     public void removeSongFromPlaylist(String playlistName, Song s) {
         Playlist playlist = getPlaylistByName(playlistName);
         if (playlist == null) {
-            System.out.println("Playlist '" + playlistName + "' not found.");
             return;
         }
         else if (s == null) {
-            System.out.println("Song not found.");
             return;
         }
         else 
@@ -268,9 +266,6 @@ public class LibraryModel {
         Playlist playlist = getPlaylistByName(playlistName);
         if (playlist != null) {
             userPlaylists.remove(playlistName); //the hash map keeps keys as names (Strings)
-            System.out.println("Playlist '" + playlistName + "' deleted.");
-        } else {
-            System.out.println("Playlist '" + playlistName + "' not found.");
         }
     }
     
