@@ -541,7 +541,7 @@ public class View {
 		
 		while (!end) {
 			System.out.println("\n=====================");
-			System.out.println(" Options: ");
+			System.out.println(" Options for "+p.getName()+" ");
 			System.out.println("=====================");
 			
 			p.getSongs().forEach(s -> System.out.println(s));
@@ -635,11 +635,15 @@ public class View {
         System.out.println("=====================");
         
         for (Playlist p : playlists.values()) {
+        	
         	System.out.println(p.getName());
         }
         
         System.out.print("Enter name: ");
+        System.out.print("Enter 1 to go back: ");
+        
         String name = sc.nextLine();
+        if(Integer.parseInt(name)==1) return;
         
         lookAtPlaylist(acc, acc.getLibrary().getPlaylistByName(name));
     }
@@ -650,9 +654,12 @@ public class View {
         System.out.println("=====================");
         
         System.out.println("Enter Name: ");
+        System.out.println("Enter 1 to go back ");
         
         String name = sc.nextLine();
-        
+        if(Integer.parseInt(name)==1)
+        {return;}
+       
         LibraryModel lib = acc.getLibrary();
         lib.createPlaylist(name);
     }

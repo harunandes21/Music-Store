@@ -211,6 +211,7 @@ public class LibraryModel {
     public void addPlaylist(Playlist playlist) {
         playlist.setAlbum();
         userPlaylists.put(playlist.getName(), playlist);
+        
     }
     //creating a new playlist
     public void createPlaylist(String name) {
@@ -219,14 +220,17 @@ public class LibraryModel {
 		userPlaylists.put(newPlaylist.getName(), newPlaylist);     
     }
 
+    // return playlist ignoring upper/lowercase and containing value
     public Playlist getPlaylistByName(String name) {
-    	for (String s : userPlaylists.keySet()) {
-    		if (name.toLowerCase().equals(s.toLowerCase())) {
-    			return userPlaylists.get(s);
-    		}
-    	}
-    	return null;
+        for (String s : userPlaylists.keySet()) {
+            
+            if (s.toLowerCase().contains(name.toLowerCase())) {
+                return userPlaylists.get(s);
+            }
+        }
+        return null;
     }
+
     
     //must receive actual song object which is expected to be within the playlist
     public void removeSongFromPlaylist(String playlistName, Song s) {
