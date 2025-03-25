@@ -12,7 +12,7 @@ import java.util.Objects;
 public class Song implements Playable {
 	
 	public static enum Rating {UNRATED, ONE, TWO, THREE, FOUR, FIVE};
-	private Rating rating;
+	private Rating rating = Rating.UNRATED;
 	private String title;
 	private String artist;
 	private String albumTitle;

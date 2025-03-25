@@ -14,6 +14,7 @@ import database.MusicStore;
 import model.Account;
 import model.Album;
 import model.LibraryModel;
+import model.Playlist;
 import model.Song;
 
 class test2 {
@@ -63,12 +64,87 @@ class test2 {
 		lib.removeSongFromLib(s.getSongId(), acc);
 		Assert.assertFalse(lib.getAllSongs().contains(s));
 		
+		lib.removeSongFromPlaylist("test playlist", s);
+		Assert.assertFalse(lib.getPlaylistMap().get("test playlist").contains(s));
+		
 		lib.deletePlaylist("test playlist");
 		Assert.assertFalse(lib.getPlaylistMap().containsKey("test playlist"));
 		
+		lib.shuffle();
+		lib.sortByArtist();
+		lib.sortByArtist(lib.getPlaylistByName("19").getSongs());
+		lib.sortByName();
+		lib.sortByName(lib.getPlaylistByName("19").getSongs());
+		lib.sortByRating();
+		lib.sortByRating(lib.getPlaylistByName("19").getSongs());
+		
+		lib.playSong(s2);
+		lib.playSong(s);
+		
+		Assert.assertTrue(lib.getPlaylistByName("19").getName().equals("19"));
+		
+		Album blank = new Album();
+		Assert.assertTrue(blank.getName().equals(""));
+		Assert.assertFalse(a.getArtist().equals(null));
+		Assert.assertFalse(a.getGenre().equals(null));
+		Assert.assertFalse(a.getName().equals(null));
+		Assert.assertFalse(a.getYear().equals(null));
 	
+		lib.rateSong(s, "five");
+		Song s3 = new Song();
 		
+		Assert.assertTrue(s.getAlbumTitle().equals("19"));
+		s3.setFavorite(true);
+		Assert.assertTrue(s3.getFavorite() == true);
+		s3.setRating("1");
+		s3.setRating("2");
+		s3.setRating("3");
+		s3.setRating("4");
+		s3.setRating("5");
 		
+		lib.createPlaylist("test");
+		Playlist p = lib.getPlaylistByName("test");
+		
+		p.addSong(s);
+		p.addSong(s2);
+		
+		p.sortByArtist();
+		p.sortByName();
+		p.sortByRating();
+		p.shuffle();
+		
+		Assert.assertTrue(a.isAlbum());
+		
+		p.setName("testy");
+		p.getEnd();
+		
+		Song s4 = p.getSongById(1);
+		
+		lib.addGenre("pop");
+		lib.addGenre("pop");
+		lib.addGenre("pop");
+		lib.addGenre("pop");
+		lib.addGenre("pop");
+		lib.addGenre("pop");
+		lib.addGenre("pop");
+		lib.addGenre("pop");
+		lib.addGenre("pop");
+		lib.addGenre("pop");
+		
+		Song s5 = store.searchSongByName("Love Song");
+		lib.deletePlaylist(a.getName());
+		
+		lib.addSongToLibrary(s);
+		
+		lib.addPlaylist(a);
+		a.getSongs().forEach(song -> lib.playSong(song));
+		
+		Album a2 = store.findAlbum("21");
+		a2.getSongs().forEach(song -> lib.addSongToLibrary(song, a2, acc));
+		
+		lib.rateSong(s2, "5");
+		
+		lib.searchSongByTitle("Daydreamer");
 		
 	}
 
